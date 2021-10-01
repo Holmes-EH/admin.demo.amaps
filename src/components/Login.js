@@ -59,6 +59,10 @@ const Login = () => {
 		}
 	}
 
+	const resetPassword = () => {
+		console.log('reset password')
+	}
+
 	return (
 		<div className='flex login'>
 			{error && <Toaster message={error} type='error' />}
@@ -98,6 +102,12 @@ const Login = () => {
 							</label>
 						</div>
 					</form>
+					<p
+						className='forgotPassword'
+						onClick={() => resetPassword()}
+					>
+						Mot de passe oublié ?
+					</p>
 					<div className='flex'>
 						<button className='button' onClick={() => login()}>
 							CONNEXION

@@ -1,3 +1,6 @@
+.loading {
+	max-width: 130px;
+}
 .loading .lemonText {
 	display: none;
 }

@@ -79,6 +79,15 @@
 	transform: scale(0.8) translateY(-5rem);
 }
 
+.forgotPassword {
+	width: 100%;
+	text-align: right;
+	font-size: 0.8em;
+	margin-top: -1em;
+	font-weight: lighter;
+	cursor: pointer;
+}
+
 .button {
 	cursor: pointer;
 	background-color: var(--orange);
