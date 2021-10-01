@@ -1,0 +1,69 @@
+.loading .lemonText {
+	display: none;
+}
+.loading #Foreground {
+	position: relative;
+}
+
+@keyframes fade {
+	0% {
+		opacity: 0;
+	}
+	1% {
+		opacity: 1;
+	}
+	2% {
+		opacity: 0;
+	}
+}
+.loading #_1 {
+	transform: matrix(
+		0.319942,
+		0.947437,
+		-0.947437,
+		0.319942,
+		1576.85,
+		-310.209
+	);
+}
+
+.loading #_0,
+.loading #_1,
+.loading #_2,
+.loading #_3,
+.loading #_4,
+.loading #_5,
+.loading #_6,
+.loading #_7,
+.loading #_8,
+.loading #_9 {
+	animation: 1s fade infinite;
+}
+
+.loading #_1 {
+	animation-delay: 0.1s;
+}
+.loading #_2 {
+	animation-delay: 0.2s;
+}
+.loading #_3 {
+	animation-delay: 0.3s;
+}
+.loading #_4 {
+	animation-delay: 0.4s;
+}
+.loading #_5 {
+	animation-delay: 0.5s;
+}
+.loading #_6 {
+	animation-delay: 0.6s;
+}
+.loading #_7 {
+	animation-delay: 0.7s;
+}
+.loading #_8 {
+	animation-delay: 0.8s;
+}
+.loading #_9 {
+	animation-delay: 0.9s;
+}

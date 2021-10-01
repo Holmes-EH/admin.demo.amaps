@@ -140,7 +140,10 @@ const Lemon = () => {
 					/>
 				</g>
 			</g>
-			<g transform='matrix(1,0,0,1,-54.681,51.5554)'>
+			<g
+				transform='matrix(1,0,0,1,-54.681,51.5554)'
+				className='lemonText'
+			>
 				<g id='text'>
 					<g transform='matrix(1,0,0,1.17,0,-134.09)'>
 						<g transform='matrix(288,0,0,288,635.671,788.764)'>
