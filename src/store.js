@@ -13,8 +13,20 @@ const StateProvider = ({ children }) => {
 				return { user: action.payload }
 			case 'RESET_USER_LOGIN':
 				return { user: {} }
-			case 'ERROR':
-				return { ...state, error: action.payload }
+			case 'LOADING': {
+				return { ...state, loading: true }
+			}
+			case 'FINISHED_LOADING': {
+				return { ...state, loading: undefined }
+			}
+			case 'MESSAGE':
+				return {
+					...state,
+					message: action.payload,
+					messageType: action.messageType,
+				}
+			case 'RESET_MESSAGE':
+				return { ...state, message: undefined }
 			default:
 				throw new Error()
 		}

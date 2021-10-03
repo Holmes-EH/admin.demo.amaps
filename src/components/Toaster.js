@@ -1,15 +1,27 @@
-import React from 'react'
+import { useContext } from 'react'
+import { store } from '../store'
 import './toaster.css'
 
 const Toaster = ({ message, type = 'error' }) => {
+	const globalState = useContext(store)
+	const { dispatch } = globalState
+
+	const dismissMessage = () => {
+		dispatch({
+			type: 'RESET_MESSAGE',
+		})
+		dispatch({
+			type: 'FINISHED_LOADING',
+		})
+	}
 	return (
-		<div className={`toast ${type}`}>
+		<div className={`toast ${type}`} onClick={dismissMessage}>
 			{type === 'error' ? (
-				<h1>Oops</h1>
+				<h1>😬</h1>
 			) : type === 'success' ? (
-				<h1>Yay !</h1>
+				<h1>😁</h1>
 			) : (
-				<h1>Info</h1>
+				<h1>🧐</h1>
 			)}
 			<p>{message}</p>
 		</div>

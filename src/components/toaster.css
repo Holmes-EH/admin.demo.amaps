@@ -1,7 +1,26 @@
 .toast {
 	position: absolute;
-	top: 0;
-	background: var(--strawberry);
+	top: 1em;
 	padding: 1em 3em;
 	border-radius: 1em;
+	cursor: pointer;
+	text-align: center;
+}
+.toast h1 {
+	font-size: 3em;
+	margin: 0;
+}
+.toast p {
+	margin: 0;
+}
+.error {
+	background: var(--strawberry);
+}
+.success {
+	background: var(--light-green);
+	color: var(--black);
+}
+.info {
+	background: var(--orange);
+	color: var(--black);
 }

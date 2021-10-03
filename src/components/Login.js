@@ -9,9 +9,8 @@ import './login.css'
 const Login = () => {
 	const globalState = useContext(store)
 	const { dispatch } = globalState
-	const { error } = globalState.state
+	const { message, loading, messageType } = globalState.state
 
-	const [loading, setIsLoading] = useState(false)
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
@@ -29,26 +28,30 @@ const Login = () => {
 	}
 
 	const login = async () => {
-		setIsLoading(true)
+		dispatch({
+			type: 'LOADING',
+		})
 		try {
 			const { data } = await axios.post(
-				'https://api-juju2fruits.netlify.app/api/users/login',
+				`${process.env.REACT_APP_API_URL}/api/users/login`,
 				{ email, password }
 			)
 			localStorage.setItem('user', JSON.stringify(data))
 			dispatch({ type: 'USER_LOGIN', payload: data })
+			dispatch({ type: 'FINISHED_LOADING' })
 		} catch (error) {
 			dispatch({
-				type: 'ERROR',
+				type: 'MESSAGE',
 				payload:
-					error.response && error.response.data.message
-						? error.response.data.message
-						: error.message,
+					error.response && error.response.data.error
+						? error.response.data.error
+						: error.error,
+				messageType: 'error',
 			})
 		}
 	}
 
-	const onKeyUp = (e) => {
+	const validateOnEnter = (e) => {
 		if (
 			e.key === 'Enter' &&
 			!e.shiftKey &&
@@ -65,7 +68,7 @@ const Login = () => {
 
 	return (
 		<div className='flex login'>
-			{error && <Toaster message={error} type='error' />}
+			{message && <Toaster message={message} type={messageType} />}
 			{loading ? (
 				<Loader />
 			) : (
@@ -75,14 +78,13 @@ const Login = () => {
 					</div>
 
 					<h2>BACK OFFICE</h2>
-					<form onKeyPress={onKeyUp}>
+					<form onKeyPress={validateOnEnter}>
 						<div className='field'>
 							<input
 								type='email'
 								name='email'
 								className='input'
 								placeholder=''
-								autoComplete='off'
 								onChange={(e) => inputChange(e)}
 							/>
 							<label htmlFor='email' className='label'>
