@@ -1,4 +1,5 @@
 import Login from './components/Login'
+import Layout from './components/backOffice/Layout'
 import { store } from './store'
 import { useContext } from 'react'
 
@@ -9,8 +10,14 @@ function App() {
 	const { user } = globalState.state
 
 	return (
-		<div className='main flex'>
-			{!user.token ? <Login /> : <div>Enter the Back Office</div>}
+		<div className='main flex column'>
+			{!user.token ? (
+				<Login />
+			) : user.isAdmin ? (
+				<Layout />
+			) : (
+				<p>redirect</p>
+			)}
 		</div>
 	)
 }

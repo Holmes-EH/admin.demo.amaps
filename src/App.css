@@ -25,7 +25,9 @@ body {
 *::after {
 	box-sizing: border-box;
 }
-
+a {
+	color: whitesmoke;
+}
 .orange {
 	fill: var(--orange);
 }
@@ -46,6 +48,9 @@ body {
 	justify-content: center;
 	align-items: center;
 }
+.column {
+	flex-direction: column;
+}
 
 label {
 	display: block;
@@ -62,4 +67,17 @@ textarea {
 	box-sizing: border-box;
 	border: 1px solid whitesmoke;
 	border-radius: 2px;
+}
+
+.modal {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	padding: 0 20%;
+	background: rgb(35, 35, 35);
+}
+
+.danger {
+	background-color: var(--strawberry);
+	color: whitesmoke;
 }
