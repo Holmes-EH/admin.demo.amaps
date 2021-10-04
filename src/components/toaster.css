@@ -5,6 +5,7 @@
 	border-radius: 1em;
 	cursor: pointer;
 	text-align: center;
+	z-index: 12;
 }
 .toast h1 {
 	font-size: 3em;

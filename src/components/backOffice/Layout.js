@@ -1,15 +1,24 @@
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, useLocation } from 'react-router-dom'
 import { useContext } from 'react'
 import { store } from '../../store'
 import Amaps from './Amaps'
 import Lemon from '../Lemon'
+import { BiLogOut } from 'react-icons/bi'
 import './layout.css'
 
 const Layout = () => {
 	const globalContext = useContext(store)
+	const { dispatch } = globalContext
 	const { user } = globalContext.state
+
+	const disconnectUser = () => {
+		dispatch({ type: 'RESET_USER_LOGIN' })
+	}
+
+	const curUrl = useLocation().pathname
+
 	return (
-		<Router>
+		<>
 			<div
 				style={{ position: 'fixed', top: '0', left: '0', zIndex: '11' }}
 			>
@@ -20,6 +29,13 @@ const Layout = () => {
 								<Lemon />
 							</Link>
 							<p>B'jour {user.name}</p>
+							<div
+								className='disconnect'
+								onClick={disconnectUser}
+							>
+								<BiLogOut style={{ marginRight: '1em' }} />
+								Déconnexion
+							</div>
 						</li>
 						<div
 							className='flex'
@@ -30,16 +46,28 @@ const Layout = () => {
 								maxWidth: '80ch',
 							}}
 						>
-							<li>
+							<li
+								className={
+									curUrl === '/produits' ? 'active' : ''
+								}
+							>
 								<Link to='/produits'>Produits</Link>
 							</li>
-							<li>
+							<li className={curUrl === '/amaps' ? 'active' : ''}>
 								<Link to='/amaps'>Amaps</Link>
 							</li>
-							<li>
+							<li
+								className={
+									curUrl === '/commandes' ? 'active' : ''
+								}
+							>
 								<Link to='/commandes'>Commandes</Link>
 							</li>
-							<li>
+							<li
+								className={
+									curUrl === '/clients' ? 'active' : ''
+								}
+							>
 								<Link to='/clients'>Clients</Link>
 							</li>
 						</div>
@@ -51,7 +79,7 @@ const Layout = () => {
 					<Amaps />
 				</Route>
 			</Switch>
-		</Router>
+		</>
 	)
 }
 

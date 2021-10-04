@@ -6,8 +6,11 @@ nav .lemonText {
 	display: none;
 }
 .logoLink {
+	cursor: pointer;
 	display: flex;
 	align-items: center;
+	margin-right: 3em;
+	position: relative;
 }
 .orange {
 	transition: all 300ms ease;
@@ -62,6 +65,33 @@ nav a:not(.logoLink a):hover::after {
 	transform: scaleX(1);
 	background: var(--sanguine);
 }
-.logoLink a:hover .orange {
+.active a {
+	color: var(--sanguine);
+}
+.active a::after {
+	transform: scaleX(1);
+	background: var(--sanguine);
+}
+
+.logoLink a:hover path.orange {
 	fill: var(--sanguine);
+}
+
+.disconnect {
+	position: absolute;
+	color: var(--black);
+	bottom: -30px;
+	font-weight: bold;
+	right: 0;
+	display: none;
+	background: var(--lemon);
+	padding: 1em;
+	border-radius: 10px;
+}
+.disconnect:hover {
+	display: flex;
+	color: var(--sanguine);
+}
+.logoLink p:hover + .disconnect {
+	display: flex;
 }
