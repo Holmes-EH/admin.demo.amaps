@@ -4,7 +4,7 @@ import { store } from '../../store'
 import axios from 'axios'
 import './editAmap.css'
 
-const EditAmap = ({ amap, setDisplayModal }) => {
+const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user } = globalContext.state
@@ -39,7 +39,7 @@ const EditAmap = ({ amap, setDisplayModal }) => {
 		}
 		if (id.length) {
 			try {
-				await axios.put(
+				const { data } = await axios.put(
 					`${process.env.REACT_APP_API_URL}/api/amaps`,
 					{
 						id,
@@ -57,8 +57,18 @@ const EditAmap = ({ amap, setDisplayModal }) => {
 					},
 					config
 				)
+				setDisplayModal(false)
+				dispatch({
+					type: 'MESSAGE',
+					payload: 'Amap mise à jour avec succès !',
+					messageType: 'success',
+				})
 				dispatch({ type: 'FINISHED_LOADING' })
-				window.location.reload()
+				let newArrayOfAmaps = amaps.filter((amap) => {
+					return amap._id !== data._id
+				})
+				newArrayOfAmaps.push(data)
+				setAmaps(newArrayOfAmaps)
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
@@ -71,7 +81,7 @@ const EditAmap = ({ amap, setDisplayModal }) => {
 			}
 		} else {
 			try {
-				await axios.post(
+				const { data } = await axios.post(
 					`${process.env.REACT_APP_API_URL}/api/amaps`,
 					{
 						id,
@@ -89,8 +99,14 @@ const EditAmap = ({ amap, setDisplayModal }) => {
 					},
 					config
 				)
+				setDisplayModal(false)
+				dispatch({
+					type: 'MESSAGE',
+					payload: 'Amap créée avec succès !',
+					messageType: 'success',
+				})
 				dispatch({ type: 'FINISHED_LOADING' })
-				window.location.reload()
+				setAmaps([...amaps, data])
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',

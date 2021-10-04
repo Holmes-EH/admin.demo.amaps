@@ -19,10 +19,14 @@ const Amaps = () => {
 	const deleteAmap = async (id, name) => {
 		if (
 			window.confirm(
-				`Es-tu sûr de vouloir supprimer les données de ${name} ?`
+				`Es-tu sûr de vouloir supprimer les données de\n${name} ?`
 			)
 		) {
 			dispatch({ type: 'LOADING' })
+			let newArrayOfAmaps = amaps.filter((amap) => {
+				return amap._id !== id
+			})
+			setAmaps(newArrayOfAmaps)
 
 			try {
 				const config = {
@@ -34,14 +38,13 @@ const Amaps = () => {
 					`${process.env.REACT_APP_API_URL}/api/amaps/${id}`,
 					config
 				)
-				console.log(data)
 				dispatch({
 					type: 'MESSAGE',
 					payload: data.message,
 					messageType: 'success',
 				})
+				dispatch({ type: 'FINISHED_LOADING' })
 			} catch (error) {
-				console.log(error)
 				dispatch({
 					type: 'MESSAGE',
 					payload:
@@ -50,6 +53,7 @@ const Amaps = () => {
 							: error.message,
 					messageType: 'error',
 				})
+				dispatch({ type: 'FINISHED_LOADING' })
 			}
 		}
 	}
@@ -101,12 +105,17 @@ const Amaps = () => {
 			}
 		}
 		getAmaps()
-	}, [dispatch, user.token, message])
+	}, [dispatch, user.token])
 
 	return (
 		<div className='flex column' style={{ flexGrow: '1' }}>
 			{displayModal && (
-				<EditAmap amap={amapToEdit} setDisplayModal={setDisplayModal} />
+				<EditAmap
+					amap={amapToEdit}
+					setDisplayModal={setDisplayModal}
+					amaps={amaps}
+					setAmaps={setAmaps}
+				/>
 			)}
 			{message && <Toaster message={message} type={messageType} />}
 			{loading ? (
