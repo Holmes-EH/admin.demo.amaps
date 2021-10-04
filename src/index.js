@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 import { StateProvider } from './store'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 ReactDOM.render(
 	<StateProvider>
-		<App />
+		<Router>
+			<App />
+		</Router>
 	</StateProvider>,
 	document.getElementById('root')
 )
