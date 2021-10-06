@@ -10,7 +10,7 @@ function App() {
 	const { user } = globalState.state
 
 	return (
-		<div className='main flex column'>
+		<div className='main flex column' style={{ paddingTop: '65px' }}>
 			{!user.token ? (
 				<Login />
 			) : user.isAdmin ? (

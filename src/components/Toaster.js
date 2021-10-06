@@ -15,15 +15,17 @@ const Toaster = ({ message, type = 'error' }) => {
 		})
 	}
 	return (
-		<div className={`toast ${type}`} onClick={dismissMessage}>
-			{type === 'error' ? (
-				<h1>😬</h1>
-			) : type === 'success' ? (
-				<h1>😁</h1>
-			) : (
-				<h1>🧐</h1>
-			)}
-			<p>{message}</p>
+		<div className='flex toastContainer'>
+			<div className={`toast ${type}`} onClick={dismissMessage}>
+				{type === 'error' ? (
+					<h1>😬</h1>
+				) : type === 'success' ? (
+					<h1>😁</h1>
+				) : (
+					<h1>🧐</h1>
+				)}
+				<p>{message}</p>
+			</div>
 		</div>
 	)
 }

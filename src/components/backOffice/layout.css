@@ -22,7 +22,7 @@ nav svg {
 }
 nav ul {
 	width: 100%;
-	height: 7vh;
+	height: 60px;
 	margin: 0;
 	list-style: none;
 	display: flex;
@@ -82,7 +82,7 @@ nav a:not(.logoLink a):hover::after {
 	color: var(--black);
 	bottom: -30px;
 	font-weight: bold;
-	right: 0;
+	left: 70px;
 	display: none;
 	background: var(--lemon);
 	padding: 1em;

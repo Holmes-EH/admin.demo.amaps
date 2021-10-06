@@ -1,5 +1,6 @@
 .login {
 	flex-direction: column;
+	margin: auto;
 }
 
 .login h1 {

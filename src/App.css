@@ -19,11 +19,18 @@ body {
 	background-color: #232323;
 	color: whitesmoke;
 }
+body {
+	padding: 0 1em;
+}
 
 *,
 *::before,
 *::after {
 	box-sizing: border-box;
+}
+h1,
+h2 {
+	text-align: center;
 }
 a {
 	color: whitesmoke;
@@ -40,16 +47,19 @@ a {
 }
 
 .main {
-	padding: 0 1em;
 	height: 100vh;
 }
 .flex {
 	display: flex;
-	justify-content: center;
-	align-items: center;
 }
 .column {
 	flex-direction: column;
+}
+
+.container {
+	flex-grow: 1;
+	justify-content: flex-start;
+	position: relative;
 }
 
 label {
@@ -65,7 +75,6 @@ textarea {
 	padding: 0.4em;
 	margin: 0 0 0.5em 0;
 	box-sizing: border-box;
-	border: 1px solid whitesmoke;
 	border-radius: 2px;
 }
 
@@ -75,9 +84,15 @@ textarea {
 	height: 100vh;
 	padding: 0 20%;
 	background: rgb(35, 35, 35);
+	padding-bottom: 70px;
 }
 
 .danger {
 	background-color: var(--strawberry);
 	color: whitesmoke;
+}
+
+.mainActions {
+	height: 100px;
+	justify-content: end;
 }
