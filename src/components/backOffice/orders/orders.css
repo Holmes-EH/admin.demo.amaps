@@ -1,0 +1,26 @@
+th,
+td {
+	text-align: center;
+}
+.monthSelect {
+	position: absolute;
+	right: 4em;
+	top: 0.9em;
+	width: 250px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 1.5em;
+	font-weight: bold;
+}
+.changeDate {
+	font-size: 2em;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+.changeDate:hover {
+	fill: var(--orange);
+}
+.paidStatus {
+	cursor: pointer;
+}

@@ -1,0 +1,14 @@
+.product form {
+	display: flex;
+	height: unset;
+	flex-direction: row;
+	gap: 3em;
+	overflow: unset;
+	margin: auto;
+}
+.available svg {
+	fill: var(--light-green);
+}
+.unavailable svg {
+	fill: var(--strawberry);
+}

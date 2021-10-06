@@ -1,7 +1,10 @@
 import { Switch, Route, Link, useLocation } from 'react-router-dom'
 import { useContext } from 'react'
 import { store } from '../../store'
-import Amaps from './Amaps'
+import Amaps from './amaps/Amaps'
+import Products from './products/Products'
+import Orders from './orders/Orders'
+import SingleClient from './clients/SingleClient'
 import Lemon from '../Lemon'
 import { BiLogOut } from 'react-icons/bi'
 import './layout.css'
@@ -78,6 +81,15 @@ const Layout = () => {
 			<Switch>
 				<Route path='/amaps'>
 					<Amaps />
+				</Route>
+				<Route path='/produits'>
+					<Products />
+				</Route>
+				<Route path='/commandes'>
+					<Orders />
+				</Route>
+				<Route path='/clients/:userId'>
+					<SingleClient />
 				</Route>
 			</Switch>
 		</>
