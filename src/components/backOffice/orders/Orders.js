@@ -3,9 +3,11 @@ import { useContext } from 'react'
 import { store } from '../../../store'
 import axios from 'axios'
 
+import EditOrder from './EditOrder'
 import Toaster from '../../Toaster'
 import Loader from '../../Loader/Loader'
 import {
+	BiEdit,
 	BiChevronLeft,
 	BiChevronRight,
 	BiCheckCircle,
@@ -21,6 +23,7 @@ const Orders = () => {
 	const [orders, setOrders] = useState([])
 	const [products, setProducts] = useState([])
 	const [selectedMonth, setSelectedMonth] = useState(new Date())
+	const [orderToEdit, setOrderToEdit] = useState({})
 
 	const [displayModal, setDisplayModal] = useState(false)
 
@@ -43,6 +46,12 @@ const Orders = () => {
 		)
 	}
 
+	const editOrder = (index, order) => {
+		order.index = index
+		setOrderToEdit(order)
+		setDisplayModal(true)
+	}
+
 	const changePaidStatus = async (index) => {
 		const orderToUpdate = orders[index]
 		orderToUpdate.paid = !orderToUpdate.paid
@@ -53,7 +62,7 @@ const Orders = () => {
 					Authorization: `Bearer ${user.token}`,
 				},
 			}
-			const { data } = await axios.put(
+			await axios.put(
 				`${process.env.REACT_APP_API_URL}/api/orders`,
 				{
 					order: {
@@ -140,6 +149,17 @@ const Orders = () => {
 	return (
 		<div className='flex column container'>
 			<h1>Commandes</h1>
+			{displayModal && (
+				<EditOrder
+					order={orderToEdit}
+					setDisplayModal={setDisplayModal}
+					orders={orders}
+					setOrders={setOrders}
+				/>
+			)}
+			{displayModal && <div>Display modal to edit</div>}
+			{message && <Toaster message={message} type={messageType} />}
+			{loading && <Loader />}
 			<div className='monthSelect'>
 				<BiChevronLeft className='changeDate' onClick={decrementDate} />
 				{selectedMonth.toLocaleDateString('fr-FR', {
@@ -151,9 +171,7 @@ const Orders = () => {
 					onClick={incrementDate}
 				/>
 			</div>
-			{displayModal && <div>Display modal to edit</div>}
-			{message && <Toaster message={message} type={messageType} />}
-			{loading && <Loader />}
+
 			{orders && (
 				<table
 					style={{
@@ -244,6 +262,14 @@ const Orders = () => {
 												}
 											/>
 										)}
+									</td>
+									<td className='rowEnd'>
+										<BiEdit
+											className='action'
+											onClick={() => {
+												editOrder(index, order)
+											}}
+										/>
 									</td>
 								</tr>
 							)

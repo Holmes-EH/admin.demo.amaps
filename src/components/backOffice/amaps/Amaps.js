@@ -97,8 +97,8 @@ const Amaps = () => {
 				dispatch({
 					type: 'MESSAGE',
 					payload:
-						error.response && error.response.data.error
-							? error.response.data.error
+						error.response && error.response.data.message
+							? error.response.data.message
 							: error.message,
 					messageType: 'error',
 				})

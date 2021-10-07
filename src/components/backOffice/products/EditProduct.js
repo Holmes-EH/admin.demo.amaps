@@ -13,6 +13,7 @@ const EditProduct = ({ product, setDisplayModal, products, setProducts }) => {
 	const [title, setTitle] = useState(product.title)
 	const [pricePerKg, setpricePerKg] = useState(product.pricePerKg)
 	const [isAvailable, setisAvailable] = useState(product.isAvailable)
+	const [productIndex] = useState(product.index)
 
 	const saveProduct = async () => {
 		dispatch({ type: 'LOADING' })
@@ -43,7 +44,7 @@ const EditProduct = ({ product, setDisplayModal, products, setProducts }) => {
 				let newArrayofProducts = products.filter((product) => {
 					return product._id !== data._id
 				})
-				newArrayofProducts.unshift(data)
+				newArrayofProducts.splice(productIndex, 0, data)
 				setProducts(newArrayofProducts)
 			} catch (error) {
 				dispatch({
@@ -125,7 +126,7 @@ const EditProduct = ({ product, setDisplayModal, products, setProducts }) => {
 						<input
 							type='checkbox'
 							name='isAvailable'
-							className='input'
+							className='input bigCheckbox'
 							checked={isAvailable}
 							onChange={(e) => setisAvailable(!isAvailable)}
 						/>

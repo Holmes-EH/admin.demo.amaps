@@ -12,6 +12,7 @@ td {
 	align-items: center;
 	font-size: 1.5em;
 	font-weight: bold;
+	z-index: 9;
 }
 .changeDate {
 	font-size: 2em;

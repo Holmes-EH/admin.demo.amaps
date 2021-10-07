@@ -71,7 +71,8 @@ const Products = () => {
 		}
 	}
 
-	const editProduct = (product) => {
+	const editProduct = (index, product) => {
+		product.index = index
 		setProductToEdit(product)
 		setDisplayModal(true)
 	}
@@ -177,7 +178,7 @@ const Products = () => {
 											<BiEdit
 												className='action'
 												onClick={() => {
-													editProduct(product)
+													editProduct(index, product)
 												}}
 											/>
 										</td>
