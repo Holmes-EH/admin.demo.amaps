@@ -22,6 +22,9 @@ const StateProvider = ({ children }) => {
 			case 'SET_PRODUCT_LIST': {
 				return { ...state, products: action.payload }
 			}
+			case 'RESET_PRODUCT_LIST': {
+				return { ...state, products: undefined }
+			}
 			case 'MESSAGE':
 				return {
 					...state,

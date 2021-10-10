@@ -22,6 +22,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 				Authorization: `Bearer ${user.token}`,
 			},
 		}
+		// If id.length > 0 then update existing (put) else, create new product (post)
 		if (id.length > 0) {
 			try {
 				const { data } = await axios.put(
@@ -61,7 +62,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 			}
 		} else {
 			try {
-				const { data } = await axios.post(
+				await axios.post(
 					`${process.env.REACT_APP_API_URL}/api/products`,
 					{
 						id,
@@ -79,8 +80,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 				})
 				dispatch({ type: 'FINISHED_LOADING' })
 				dispatch({
-					type: 'SET_PRODUCT_LIST',
-					payload: [data, ...products],
+					type: 'RESET_PRODUCT_LIST',
 				})
 			} catch (error) {
 				dispatch({
