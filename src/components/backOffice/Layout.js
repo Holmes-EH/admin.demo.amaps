@@ -1,10 +1,12 @@
 import { Switch, Route, Link, useLocation } from 'react-router-dom'
 import { useContext } from 'react'
 import { store } from '../../store'
+import Home from './Home'
 import Amaps from './amaps/Amaps'
 import Products from './products/Products'
 import Orders from './orders/Orders'
-import SingleClient from './clients/SingleClient'
+import Users from './users/Users'
+import SingleClient from './users/SingleClient'
 import Lemon from '../Lemon'
 import { BiLogOut } from 'react-icons/bi'
 import './layout.css'
@@ -72,24 +74,31 @@ const Layout = () => {
 									curUrl === '/clients' ? 'active' : ''
 								}
 							>
-								<Link to='/clients'>Clients</Link>
+								<Link to='/clients'>Utilisateurs</Link>
 							</li>
 						</div>
 					</ul>
 				</nav>
 			</div>
 			<Switch>
-				<Route path='/amaps'>
-					<Amaps />
-				</Route>
 				<Route path='/produits'>
 					<Products />
 				</Route>
+				<Route path='/amaps'>
+					<Amaps />
+				</Route>
+
 				<Route path='/commandes'>
 					<Orders />
 				</Route>
 				<Route path='/clients/:userId'>
 					<SingleClient />
+				</Route>
+				<Route path='/clients'>
+					<Users />
+				</Route>
+				<Route path='/'>
+					<Home />
 				</Route>
 			</Switch>
 		</>

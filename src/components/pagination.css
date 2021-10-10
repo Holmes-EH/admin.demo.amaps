@@ -1,0 +1,24 @@
+.pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 1em;
+}
+.changePage {
+	font-size: 2em;
+	cursor: pointer;
+}
+.pagination > div {
+	padding: 0.3em 0.8em;
+	border: 1px solid whitesmoke;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+.pagination > div.active,
+.pagination > div:not(.changePage):hover {
+	background-color: whitesmoke;
+	color: var(--black);
+}
+.pagination > div + div {
+	margin-left: 1em;
+}

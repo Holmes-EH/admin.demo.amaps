@@ -1,0 +1,42 @@
+.searchForm {
+	position: relative;
+}
+.userSearch {
+	position: absolute;
+	right: 4em;
+	top: 1.6em;
+	width: 250px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-weight: bold;
+	z-index: 9;
+}
+.userSearch button {
+	border: none;
+	display: flex;
+	align-items: center;
+	background: none;
+	font-size: 2em;
+	margin: auto;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+.searchButton {
+	color: whitesmoke;
+}
+
+.searchButton:hover {
+	color: var(--orange);
+}
+.resetSearch {
+	position: absolute;
+	right: 0;
+	padding-left: 0;
+	padding-right: 0;
+	color: var(--black);
+}
+
+.resetSearch:hover {
+	color: var(--strawberry);
+}
