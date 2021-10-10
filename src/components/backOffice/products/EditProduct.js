@@ -4,10 +4,10 @@ import { store } from '../../../store'
 import axios from 'axios'
 import './editProduct.css'
 
-const EditProduct = ({ product, setDisplayModal, products, setProducts }) => {
+const EditProduct = ({ product, setDisplayModal }) => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
-	const { user } = globalContext.state
+	const { user, products } = globalContext.state
 
 	const [id] = useState(product._id)
 	const [title, setTitle] = useState(product.title)
@@ -45,7 +45,10 @@ const EditProduct = ({ product, setDisplayModal, products, setProducts }) => {
 					return product._id !== data._id
 				})
 				newArrayofProducts.splice(productIndex, 0, data)
-				setProducts(newArrayofProducts)
+				dispatch({
+					type: 'SET_PRODUCT_LIST',
+					payload: newArrayofProducts,
+				})
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
@@ -75,7 +78,10 @@ const EditProduct = ({ product, setDisplayModal, products, setProducts }) => {
 					messageType: 'success',
 				})
 				dispatch({ type: 'FINISHED_LOADING' })
-				setProducts([data, ...products])
+				dispatch({
+					type: 'SET_PRODUCT_LIST',
+					payload: [data, ...products],
+				})
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',

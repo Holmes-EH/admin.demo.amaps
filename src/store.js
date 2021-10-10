@@ -2,7 +2,7 @@ import { createContext, useReducer } from 'react'
 
 const userFromStorage = JSON.parse(localStorage.getItem('user')) || {}
 
-const initialState = { user: userFromStorage }
+const initialState = { user: userFromStorage, products: [] }
 const store = createContext(initialState)
 const { Provider } = store
 
@@ -18,6 +18,9 @@ const StateProvider = ({ children }) => {
 			}
 			case 'FINISHED_LOADING': {
 				return { ...state, loading: undefined }
+			}
+			case 'SET_PRODUCT_LIST': {
+				return { ...state, products: action.payload }
 			}
 			case 'MESSAGE':
 				return {

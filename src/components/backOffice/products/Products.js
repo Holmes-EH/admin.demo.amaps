@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState } from 'react'
 import { store } from '../../../store'
 import axios from 'axios'
 import Toaster from '../../Toaster'
@@ -17,8 +17,8 @@ import './products.css'
 const Products = () => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
-	const { user, message, messageType, loading } = globalContext.state
-	const [products, setProducts] = useState([])
+	const { user, message, messageType, loading, products } =
+		globalContext.state
 	const [displayModal, setDisplayModal] = useState(false)
 	const [productToEdit, setProductToEdit] = useState()
 
@@ -39,7 +39,10 @@ const Products = () => {
 			let newArrayOfProducts = products.filter((product) => {
 				return product._id !== id
 			})
-			setProducts(newArrayOfProducts)
+			dispatch({
+				type: 'SET_PRODUCT_LIST',
+				payload: newArrayOfProducts,
+			})
 
 			try {
 				const config = {
@@ -77,35 +80,6 @@ const Products = () => {
 		setDisplayModal(true)
 	}
 
-	useEffect(() => {
-		const getProducts = async () => {
-			dispatch({ type: 'LOADING' })
-			try {
-				const config = {
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				}
-				const { data } = await axios.get(
-					`${process.env.REACT_APP_API_URL}/api/products`,
-					config
-				)
-				dispatch({ type: 'FINISHED_LOADING' })
-				setProducts(data)
-			} catch (error) {
-				dispatch({
-					type: 'MESSAGE',
-					payload:
-						error.response && error.response.data.error
-							? error.response.data.error
-							: error.message,
-					messageType: 'error',
-				})
-			}
-		}
-		getProducts()
-	}, [dispatch, user.token])
-
 	return (
 		<div className='flex column container'>
 			<h1>Produits</h1>
@@ -113,8 +87,6 @@ const Products = () => {
 				<EditProduct
 					product={productToEdit}
 					setDisplayModal={setDisplayModal}
-					products={products}
-					setProducts={setProducts}
 				/>
 			)}
 			{message && <Toaster message={message} type={messageType} />}

@@ -6,6 +6,8 @@ import axios from 'axios'
 import EditOrder from './EditOrder'
 import Toaster from '../../Toaster'
 import Loader from '../../Loader/Loader'
+import Pagination from '../../Pagination'
+
 import {
 	BiEdit,
 	BiChevronLeft,
@@ -19,11 +21,13 @@ import './orders.css'
 const Orders = () => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
-	const { user, message, messageType, loading } = globalContext.state
+	const { user, message, messageType, loading, products } =
+		globalContext.state
 	const [orders, setOrders] = useState([])
-	const [products, setProducts] = useState([])
 	const [selectedMonth, setSelectedMonth] = useState(new Date())
 	const [orderToEdit, setOrderToEdit] = useState({})
+	const [pageNumber, setPageNumber] = useState(1)
+	const [pages, setPages] = useState(1)
 
 	const [displayModal, setDisplayModal] = useState(false)
 
@@ -36,11 +40,13 @@ const Orders = () => {
 	}
 
 	const decrementDate = () => {
+		setPageNumber(1)
 		setSelectedMonth(
 			new Date(selectedMonth.setMonth(selectedMonth.getMonth() - 1))
 		)
 	}
 	const incrementDate = () => {
+		setPageNumber(1)
 		setSelectedMonth(
 			new Date(selectedMonth.setMonth(selectedMonth.getMonth() + 1))
 		)
@@ -102,11 +108,13 @@ const Orders = () => {
 					},
 				}
 				const { data } = await axios.get(
-					`${process.env.REACT_APP_API_URL}/api/orders/session/${selectedSession}`,
+					`${process.env.REACT_APP_API_URL}/api/orders/session/${selectedSession}?pageNumber=${pageNumber}`,
 					config
 				)
 				dispatch({ type: 'FINISHED_LOADING' })
-				setOrders(data)
+				setPageNumber(data.page)
+				setPages(data.pages)
+				setOrders(data.sessionOrders)
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
@@ -118,33 +126,8 @@ const Orders = () => {
 				})
 			}
 		}
-		const getProducts = async () => {
-			try {
-				const config = {
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				}
-				const { data } = await axios.get(
-					`${process.env.REACT_APP_API_URL}/api/products`,
-					config
-				)
-				setProducts(data)
-			} catch (error) {
-				dispatch({
-					type: 'MESSAGE',
-					payload:
-						error.response && error.response.data.error
-							? error.response.data.error
-							: error.message,
-					messageType: 'error',
-				})
-			}
-		}
-
 		getOrdersBySession()
-		getProducts()
-	}, [dispatch, user.token, selectedMonth])
+	}, [dispatch, user.token, selectedMonth, pageNumber])
 
 	return (
 		<div className='flex column container'>
@@ -282,6 +265,11 @@ const Orders = () => {
 					Aucune Commande trouvée pour ce mois-ci
 				</p>
 			)}
+			<Pagination
+				pages={pages}
+				pageNumber={pageNumber}
+				setPageNumber={setPageNumber}
+			/>
 		</div>
 	)
 }
