@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { store } from '../../../store'
 import axios from 'axios'
@@ -8,15 +8,25 @@ import { BiCaretRight } from 'react-icons/bi'
 const EditOrder = ({ order, setDisplayModal, orders, setOrders }) => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
-	const { user } = globalContext.state
+	const { user, products } = globalContext.state
 
 	const [id] = useState(order._id)
 	const [details, setDetails] = useState(order.details)
 	const [orderIndex] = useState(order.index)
 
-	const setQuantity = (quantity, index) => {
+	const setQuantity = (product, quantity) => {
 		let newDetails = [...details]
-		newDetails[index].quantity = quantity
+		let detail = newDetails.filter(
+			(detail) => detail.product._id === product._id
+		)
+		if (detail.length > 0) {
+			const detailIndex = details.findIndex(
+				(detail) => detail.product._id === product._id
+			)
+			newDetails[detailIndex].quantity = quantity
+		} else {
+			newDetails.push({ product, quantity })
+		}
 		setDetails(newDetails)
 	}
 
@@ -37,6 +47,12 @@ const EditOrder = ({ order, setDisplayModal, orders, setOrders }) => {
 			},
 		}
 		try {
+			details.forEach((detail) => {
+				let productId = detail.product._id
+				delete detail.product
+				detail.product = productId
+			})
+
 			const { data } = await axios.put(
 				`${process.env.REACT_APP_API_URL}/api/orders`,
 				{
@@ -71,6 +87,8 @@ const EditOrder = ({ order, setDisplayModal, orders, setOrders }) => {
 		}
 	}
 
+	useEffect(() => {}, [details])
+
 	return (
 		<div className='modal flex column'>
 			<h1>
@@ -89,32 +107,66 @@ const EditOrder = ({ order, setDisplayModal, orders, setOrders }) => {
 				{displayDate(order.createdAt)}
 			</h4>
 			<form>
-				{details.map((detail, index) => {
-					return (
-						<div
-							className='field'
-							key={detail._id}
-							style={{ width: '40%' }}
-						>
-							<input
-								type='number'
-								step='0.1'
-								name={detail.product.title}
-								className='input'
-								value={detail.quantity}
-								autoComplete='off'
-								onChange={(e) =>
-									setQuantity(e.target.value, index)
-								}
-							/>
-							<label
-								htmlFor={detail.product.title}
-								className='label'
-							>
-								{detail.product.title}
-							</label>
-						</div>
+				{products.map((product) => {
+					const detailToDisplay = details.filter(
+						(detail) => detail.product._id === product._id
 					)
+					if (detailToDisplay.length !== 0) {
+						return (
+							<div
+								className='field'
+								key={detailToDisplay[0].product._id}
+								style={{ width: '40%' }}
+							>
+								<input
+									type='number'
+									step='0.1'
+									name={detailToDisplay[0].product.title}
+									className='input'
+									value={detailToDisplay[0].quantity}
+									autoComplete='off'
+									onChange={(e) =>
+										setQuantity(
+											detailToDisplay[0].product,
+											e.target.value
+										)
+									}
+								/>
+								<label
+									htmlFor={detailToDisplay[0].product.title}
+									className='label'
+								>
+									{detailToDisplay[0].product.title}
+								</label>
+							</div>
+						)
+					} else {
+						return (
+							<div
+								className='field'
+								key={`new-${product._id}-In-${order._id}`}
+								style={{ width: '40%' }}
+							>
+								<input
+									type='number'
+									step='0.1'
+									name={product.title}
+									className='input'
+									value='0'
+									autoComplete='off'
+									onChange={(e) =>
+										setQuantity(product, e.target.value)
+									}
+								/>
+								<label
+									htmlFor={product.title}
+									className='label'
+								>
+									{product.title}
+								</label>
+							</div>
+						)
+					}
 				})}
 			</form>
 			<div

@@ -197,18 +197,33 @@ const Orders = () => {
 									</td>
 
 									{products.map((product) => {
-										return order.details.map((detail) => {
-											if (
-												detail.product.title ===
-												product.title
-											) {
-												return (
-													<td key={order._id}>
-														{detail.quantity}
-													</td>
-												)
-											} else return null
-										})
+										const detailToDisplay =
+											order.details.filter(
+												(detail) =>
+													detail.product._id ===
+													product._id
+											)
+
+										if (detailToDisplay.length !== 0) {
+											return (
+												<td
+													key={detailToDisplay[0]._id}
+												>
+													{
+														detailToDisplay[0]
+															.quantity
+													}
+												</td>
+											)
+										} else {
+											return (
+												<td
+													key={`${product._id}-notIn-${order._id}`}
+												>
+													0
+												</td>
+											)
+										}
 									})}
 
 									<td>
