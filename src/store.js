@@ -1,6 +1,7 @@
 import { createContext, useReducer } from 'react'
 
-const userFromStorage = JSON.parse(localStorage.getItem('user')) || {}
+const userFromStorage =
+	JSON.parse(localStorage.getItem('juju2fruits_user')) || {}
 
 const initialState = { user: userFromStorage, products: [] }
 const store = createContext(initialState)

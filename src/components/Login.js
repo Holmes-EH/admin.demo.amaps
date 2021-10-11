@@ -36,7 +36,7 @@ const Login = () => {
 				`${process.env.REACT_APP_API_URL}/api/users/login`,
 				{ email, password }
 			)
-			localStorage.setItem('user', JSON.stringify(data))
+			localStorage.setItem('juju2fruits_user', JSON.stringify(data))
 			dispatch({ type: 'USER_LOGIN', payload: data })
 			dispatch({ type: 'FINISHED_LOADING' })
 		} catch (error) {
