@@ -10,6 +10,7 @@ import Pagination from '../../Pagination'
 
 import {
 	BiEdit,
+	BiTrash,
 	BiChevronLeft,
 	BiChevronRight,
 	BiCheckCircle,
@@ -31,12 +32,8 @@ const Orders = () => {
 
 	const [displayModal, setDisplayModal] = useState(false)
 
-	const getOrderTotal = (orderDetails) => {
-		let orderTotal = 0
-		orderDetails.forEach((detail) => {
-			orderTotal += detail.quantity * detail.product.pricePerKg
-		})
-		return orderTotal
+	const getOrderTotal = (total, detail) => {
+		return total + detail.quantity * detail.product.pricePerKg
 	}
 
 	const decrementDate = () => {
@@ -56,6 +53,43 @@ const Orders = () => {
 		order.index = index
 		setOrderToEdit(order)
 		setDisplayModal(true)
+	}
+
+	const deleteOrder = async (orderId) => {
+		if (window.confirm('Es-tu sûr de vouloir supprimer cette commande ?')) {
+			dispatch({ type: 'LOADING' })
+			let newArrayOfOrders = orders.filter((order) => {
+				return order._id !== orderId
+			})
+			try {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+				const { data } = await axios.delete(
+					`${process.env.REACT_APP_API_URL}/api/orders/${orderId}`,
+					config
+				)
+				dispatch({
+					type: 'MESSAGE',
+					payload: data.message,
+					messageType: 'success',
+				})
+				setOrders(newArrayOfOrders)
+				dispatch({ type: 'FINISHED_LOADING' })
+			} catch (error) {
+				dispatch({
+					type: 'MESSAGE',
+					payload:
+						error.response && error.response.data.error
+							? error.response.data.error
+							: error.message,
+					messageType: 'error',
+				})
+				dispatch({ type: 'FINISHED_LOADING' })
+			}
+		}
 	}
 
 	const changePaidStatus = async (index) => {
@@ -228,9 +262,9 @@ const Orders = () => {
 
 									<td>
 										<b>
-											{getOrderTotal(
-												order.details
-											).toFixed(2)}{' '}
+											{order.details
+												.reduce(getOrderTotal, 0)
+												.toFixed(2)}{' '}
 											€
 										</b>
 									</td>
@@ -266,6 +300,14 @@ const Orders = () => {
 											className='action'
 											onClick={() => {
 												editOrder(index, order)
+											}}
+										/>
+									</td>
+									<td className='rowEnd'>
+										<BiTrash
+											className='action'
+											onClick={() => {
+												deleteOrder(order._id)
 											}}
 										/>
 									</td>
