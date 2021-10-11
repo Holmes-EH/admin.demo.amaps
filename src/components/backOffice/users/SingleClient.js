@@ -8,17 +8,16 @@ import Toaster from '../../Toaster'
 import Loader from '../../Loader/Loader'
 
 const SingleClient = () => {
-	let history = useHistory()
+	const history = useHistory()
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user, message, messageType, loading } = globalContext.state
 	const [currentUser, setCurrentUser] = useState({
 		name: '',
 		email: '',
-		isAdmin: true,
+		isAdmin: false,
 	})
 	const { userId } = useParams()
-
 	const setValue = (field, value) => {
 		let newUserData = { ...currentUser }
 		switch (field) {
@@ -64,7 +63,7 @@ const SingleClient = () => {
 				messageType: 'success',
 			})
 			dispatch({ type: 'FINISHED_LOADING' })
-			history.push('/')
+			history.goBack()
 		} catch (error) {
 			dispatch({
 				type: 'MESSAGE',

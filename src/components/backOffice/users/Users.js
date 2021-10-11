@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { store } from '../../../store'
 import axios from 'axios'
+import { useHistory } from 'react-router-dom'
 
 import Toaster from '../../Toaster'
 import Loader from '../../Loader/Loader'
@@ -9,9 +10,17 @@ import Pagination from '../../Pagination'
 
 import './users.css'
 
-import { BiCheckCircle, BiMinusCircle, BiSearchAlt2, BiX } from 'react-icons/bi'
+import {
+	BiEdit,
+	BiTrash,
+	BiCheckCircle,
+	BiMinusCircle,
+	BiSearchAlt2,
+	BiX,
+} from 'react-icons/bi'
 
 const Users = () => {
+	const history = useHistory()
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user, message, messageType, loading } = globalContext.state
@@ -29,6 +38,47 @@ const Users = () => {
 		e.preventDefault()
 		setTempKeyword('')
 		setKeyword('')
+	}
+
+	const deleteUser = async (userToDelete) => {
+		if (
+			window.confirm(
+				`Es-tu sûr de vouloir supprimer le profil de\n${userToDelete.name} et toutes ses commandes ?`
+			)
+		) {
+			dispatch({ type: 'LOADING' })
+			let newArrayOfUsers = users.filter((user) => {
+				return user._id !== userToDelete._id
+			})
+			try {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+				const { data } = await axios.delete(
+					`${process.env.REACT_APP_API_URL}/api/users/${userToDelete._id}`,
+					config
+				)
+				dispatch({
+					type: 'MESSAGE',
+					payload: data.message,
+					messageType: 'success',
+				})
+				setUsers(newArrayOfUsers)
+				dispatch({ type: 'FINISHED_LOADING' })
+			} catch (error) {
+				dispatch({
+					type: 'MESSAGE',
+					payload:
+						error.response && error.response.data.error
+							? error.response.data.error
+							: error.message,
+					messageType: 'error',
+				})
+				dispatch({ type: 'FINISHED_LOADING' })
+			}
+		}
 	}
 
 	useEffect(() => {
@@ -75,9 +125,10 @@ const Users = () => {
 					<input
 						type='text'
 						name='search'
+						placeholder='Rechercher par nom'
 						value={tempKeyword}
 						onChange={(e) => setTempKeyword(e.target.value)}
-						style={{ margin: 'auto' }}
+						style={{ margin: 'auto', border: 'none' }}
 					/>
 					<button
 						className='resetSearch'
@@ -132,6 +183,22 @@ const Users = () => {
 										month: 'numeric',
 										year: 'numeric',
 									})}
+								</td>
+								<td className='rowEnd'>
+									<BiEdit
+										className='action'
+										onClick={() => {
+											history.push(`/clients/${user._id}`)
+										}}
+									/>
+								</td>
+								<td className='rowEnd'>
+									<BiTrash
+										className='action'
+										onClick={() => {
+											deleteUser(user)
+										}}
+									/>
 								</td>
 							</tr>
 						)
