@@ -13,6 +13,13 @@ const Home = () => {
 		<div className='flex column container'>
 			{message && <Toaster message={message} type={messageType} />}
 			{loading && <Loader />}
+			<h2 style={{ textAlign: 'left' }}>Dashboard Ideas</h2>
+			<ul>
+				<li>
+					Next session order full quantity recap + link to recap per
+					amap
+				</li>
+			</ul>
 		</div>
 	)
 }

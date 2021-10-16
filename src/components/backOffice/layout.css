@@ -76,19 +76,19 @@ nav a:not(.logoLink a):hover::after {
 .logoLink a:hover path.orange {
 	fill: var(--sanguine);
 }
-
+.user {
+	position: relative;
+}
 .disconnect {
 	position: absolute;
 	color: var(--black);
-	bottom: -30px;
-	font-weight: bold;
-	left: 70px;
+	font-weight: 700;
 	display: none;
 	background: var(--lemon);
 	padding: 1em;
 	border-radius: 10px;
 }
-.disconnect:hover {
+.user:hover .disconnect {
 	display: flex;
 	color: var(--sanguine);
 }

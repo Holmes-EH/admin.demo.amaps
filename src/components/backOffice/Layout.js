@@ -35,13 +35,15 @@ const Layout = () => {
 							<Link to='/'>
 								<Lemon />
 							</Link>
-							<p>B'jour {user.name}</p>
-							<div
-								className='disconnect'
-								onClick={disconnectUser}
-							>
-								<BiLogOut style={{ marginRight: '1em' }} />
-								Déconnexion
+							<div className='user'>
+								<p>B'jour {user.name}</p>
+								<div
+									className='disconnect'
+									onClick={disconnectUser}
+								>
+									<BiLogOut style={{ marginRight: '1em' }} />
+									Déconnexion
+								</div>
 							</div>
 						</li>
 						<div
