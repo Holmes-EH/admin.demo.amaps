@@ -13,6 +13,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 	const [title, setTitle] = useState(product.title)
 	const [pricePerKg, setpricePerKg] = useState(product.pricePerKg)
 	const [isAvailable, setisAvailable] = useState(product.isAvailable)
+	const [unitOnly, setUnitOnly] = useState(product.unitOnly)
 	const [productIndex] = useState(product.index)
 
 	const saveProduct = async () => {
@@ -32,6 +33,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 						title,
 						pricePerKg,
 						isAvailable,
+						unitOnly,
 					},
 					config
 				)
@@ -69,6 +71,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 						title,
 						pricePerKg,
 						isAvailable,
+						unitOnly,
 					},
 					config
 				)
@@ -138,6 +141,18 @@ const EditProduct = ({ product, setDisplayModal }) => {
 						/>
 						<label htmlFor='rue' className='label'>
 							Disponible
+						</label>
+					</div>
+					<div className='field'>
+						<input
+							type='checkbox'
+							name='unitOnly'
+							className='input bigCheckbox'
+							checked={unitOnly}
+							onChange={(e) => setUnitOnly(!unitOnly)}
+						/>
+						<label htmlFor='rue' className='label'>
+							Vendu à l'unité
 						</label>
 					</div>
 				</form>

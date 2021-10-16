@@ -29,6 +29,7 @@ const Products = () => {
 			title: '',
 			pricePerKg: 0,
 			isAvailable: false,
+			unitOnly: false,
 		}
 		setProductToEdit(product)
 	}
@@ -104,8 +105,13 @@ const Products = () => {
 						<thead>
 							<tr>
 								<th>Fruit</th>
-								<th>Prix au kg</th>
+								<th>
+									Prix au kg
+									<br />
+									<i>Ou à l'unité</i>
+								</th>
 								<th>Disponible</th>
+								<th>Vendu à l'unité</th>
 								<th
 									className='rowEnd'
 									colSpan='2'
@@ -141,6 +147,23 @@ const Products = () => {
 											}}
 										>
 											{product.isAvailable ? (
+												<BiCheckCircle />
+											) : (
+												<BiMinusCircle />
+											)}
+										</td>
+										<td
+											className={
+												product.unitOnly
+													? 'available'
+													: 'unavailable'
+											}
+											style={{
+												textAlign: 'center',
+												fontSize: '1.4em',
+											}}
+										>
+											{product.unitOnly ? (
 												<BiCheckCircle />
 											) : (
 												<BiMinusCircle />

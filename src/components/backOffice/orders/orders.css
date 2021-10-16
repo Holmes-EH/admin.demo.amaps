@@ -2,6 +2,9 @@ th,
 td {
 	text-align: center;
 }
+h1 {
+	z-index: 11;
+}
 .monthSelect {
 	position: absolute;
 	right: 4em;
@@ -12,7 +15,7 @@ td {
 	align-items: center;
 	font-size: 1.5em;
 	font-weight: bold;
-	z-index: 9;
+	z-index: 11;
 }
 .changeDate {
 	font-size: 2em;
