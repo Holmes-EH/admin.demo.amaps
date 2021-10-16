@@ -18,7 +18,7 @@ const Layout = () => {
 	const { user } = globalContext.state
 
 	const disconnectUser = () => {
-		localStorage.removeItem('user')
+		localStorage.removeItem('juju2fruits_user')
 		dispatch({ type: 'RESET_USER_LOGIN' })
 	}
 
