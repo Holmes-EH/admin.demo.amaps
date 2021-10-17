@@ -1,33 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap');
-
-:root {
-	--black: #232323;
-	--white: #fffeca;
-	--dark-green: #6b7c00;
-	--light-green: #bdbc3e;
-	--lemon: #fcc531;
-	--orange: #f8b605;
-	--strawberry: #e8293f;
-	--sanguine: #9c031f;
-}
-
-html,
-body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Red Hat Display', sans-serif;
-	background-color: #232323;
-	color: whitesmoke;
-}
-body {
-	padding: 0 1em;
-}
-
-*,
-*::before,
-*::after {
-	box-sizing: border-box;
-}
 h1,
 h2 {
 	text-align: center;
