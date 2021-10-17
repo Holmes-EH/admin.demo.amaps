@@ -97,10 +97,12 @@ const Home = () => {
 			<h2>pour le mois de :</h2>
 			<div className='recapMonthSelect'>
 				<BiChevronLeft className='changeDate' onClick={decrementDate} />
-				{selectedMonth.toLocaleDateString('fr-FR', {
-					month: 'long',
-					year: 'numeric',
-				})}
+				<div style={{ minWidth: '200px', textAlign: 'center' }}>
+					{selectedMonth.toLocaleDateString('fr-FR', {
+						month: 'long',
+						year: 'numeric',
+					})}
+				</div>
 				<BiChevronRight
 					className='changeDate'
 					onClick={incrementDate}
@@ -153,7 +155,7 @@ const Home = () => {
 									)
 								})}
 								<td>
-									<b>{getSessionTotalWeight()}</b>
+									<b>{getSessionTotalWeight()} kg</b>
 								</td>
 							</tr>
 						</tbody>
