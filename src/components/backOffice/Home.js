@@ -50,7 +50,6 @@ const Home = () => {
 			let productInRecap = recap.products.filter(
 				(detail) => detail.product._id === product._id
 			)
-			productInRecap.length > 0 && console.log(productInRecap[0].quantity)
 			productInRecap.length > 0 &&
 				(totalWeightPerProduct += productInRecap[0].quantity)
 		})
