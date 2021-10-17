@@ -1,0 +1,21 @@
+.recap {
+	max-width: '1100px';
+	margin: 0 auto;
+}
+.recapMonthSelect {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	font-size: 1.5em;
+	font-weight: bold;
+	z-index: 11;
+	max-width: 500px;
+	margin: 0 auto;
+	margin-bottom: 1em;
+}
+.recap h1 {
+	margin-bottom: 0;
+}
+.recap h2 {
+	margin: 0 auto;
+}
