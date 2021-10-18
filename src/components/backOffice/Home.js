@@ -23,11 +23,13 @@ const Home = () => {
 		setSelectedMonth(
 			new Date(selectedMonth.setMonth(selectedMonth.getMonth() - 1))
 		)
+		setReceptionDate(selectedMonth)
 	}
 	const incrementDate = () => {
 		setSelectedMonth(
 			new Date(selectedMonth.setMonth(selectedMonth.getMonth() + 1))
 		)
+		setReceptionDate(selectedMonth)
 	}
 
 	const getRecapTotalWeight = (total, product) => {
@@ -135,7 +137,7 @@ const Home = () => {
 					config
 				)
 				dispatch({ type: 'FINISHED_LOADING' })
-				setSessions(data.sessions)
+				setSessions(data)
 			} catch (error) {
 				setSessions([])
 			}
