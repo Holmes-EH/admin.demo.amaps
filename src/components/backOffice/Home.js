@@ -4,7 +4,6 @@ import axios from 'axios'
 
 import Toaster from '../Toaster'
 import Loader from '../Loader/Loader'
-import Pagination from '../Pagination'
 
 import './home.css'
 
@@ -16,25 +15,26 @@ const Home = () => {
 	const { user, message, messageType, loading, products } =
 		globalContext.state
 	const [recaps, setRecaps] = useState([])
+	const [sessions, setSessions] = useState([])
 	const [selectedMonth, setSelectedMonth] = useState(new Date())
-	const [pageNumber, setPageNumber] = useState(1)
-	const [pages, setPages] = useState(1)
+	const [receptionDate, setReceptionDate] = useState(selectedMonth)
 
 	const decrementDate = () => {
-		setPageNumber(1)
 		setSelectedMonth(
 			new Date(selectedMonth.setMonth(selectedMonth.getMonth() - 1))
 		)
 	}
 	const incrementDate = () => {
-		setPageNumber(1)
 		setSelectedMonth(
 			new Date(selectedMonth.setMonth(selectedMonth.getMonth() + 1))
 		)
 	}
 
 	const getRecapTotalWeight = (total, product) => {
-		return total + product.quantity
+		return (
+			product.product.title.toLowerCase() !== 'mangues' &&
+			total + product.quantity
+		)
 	}
 
 	const getSessionTotalWeight = () => {
@@ -56,6 +56,36 @@ const Home = () => {
 		return totalWeightPerProduct
 	}
 
+	const addNewSession = async () => {
+		dispatch({ type: 'LOADING' })
+		const selectedSession =
+			selectedMonth.getFullYear().toString() +
+			('0' + (selectedMonth.getMonth() + 1)).slice(-2)
+		try {
+			const config = {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			}
+			const { data } = await axios.post(
+				`${process.env.REACT_APP_API_URL}/api/sessions`,
+				{ session: selectedSession, isOpen: true },
+				config
+			)
+			dispatch({ type: 'FINISHED_LOADING' })
+			setSessions(data.sessions)
+		} catch (error) {
+			dispatch({
+				type: 'MESSAGE',
+				payload:
+					error.response && error.response.data.message
+						? error.response.data.message
+						: error.message,
+				messageType: 'error',
+			})
+		}
+	}
+
 	useEffect(() => {
 		const getRecapsBySession = async () => {
 			dispatch({ type: 'LOADING' })
@@ -69,32 +99,61 @@ const Home = () => {
 					},
 				}
 				const { data } = await axios.get(
-					`${process.env.REACT_APP_API_URL}/api/orders/recaps/${selectedSession}?pageNumber=${pageNumber}`,
+					`${process.env.REACT_APP_API_URL}/api/orders/recaps/${selectedSession}`,
 					config
 				)
 				dispatch({ type: 'FINISHED_LOADING' })
-				setPageNumber(data.page)
-				setPages(data.pages)
 				setRecaps(data.sessionRecaps)
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
 					payload:
-						error.response && error.response.data.error
-							? error.response.data.error
+						error.response && error.response.data.message
+							? error.response.data.message
 							: error.message,
 					messageType: 'error',
 				})
 			}
 		}
 		getRecapsBySession()
-	}, [dispatch, user.token, selectedMonth, pageNumber])
+	}, [dispatch, user.token, selectedMonth])
+
+	useEffect(() => {
+		const getSession = async () => {
+			dispatch({ type: 'LOADING' })
+			const selectedSession =
+				selectedMonth.getFullYear().toString() +
+				('0' + (selectedMonth.getMonth() + 1)).slice(-2)
+			try {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+				const { data } = await axios.get(
+					`${process.env.REACT_APP_API_URL}/api/sessions?session=${selectedSession}`,
+					config
+				)
+				dispatch({ type: 'FINISHED_LOADING' })
+				setSessions(data.sessions)
+			} catch (error) {
+				setSessions([])
+			}
+		}
+		getSession()
+	}, [dispatch, user.token, selectedMonth])
 
 	return (
 		<div className='flex column container recap'>
 			{message && <Toaster message={message} type={messageType} />}
-			<h1>Récapitulatifs</h1>
-			<h2>pour le mois de :</h2>
+			{sessions && sessions.length === 0 ? (
+				<h1 className='stop'>Commandes non autorisées...</h1>
+			) : (
+				<>
+					<h1 className='go'>Commandes autorisées</h1>
+				</>
+			)}
+
 			<div className='recapMonthSelect'>
 				<BiChevronLeft className='changeDate' onClick={decrementDate} />
 				<div style={{ minWidth: '200px', textAlign: 'center' }}>
@@ -109,10 +168,20 @@ const Home = () => {
 				/>
 			</div>
 			{loading && <Loader />}
-
-			{recaps && recaps.length === 0 ? (
+			{sessions && sessions.length === 0 ? (
+				<div
+					className='button'
+					style={{
+						padding: '0.3em 1em',
+						borderRadius: '5px',
+					}}
+					onClick={addNewSession}
+				>
+					Autoriser les commandes
+				</div>
+			) : recaps && recaps.length === 0 ? (
 				<p style={{ textAlign: 'center' }}>
-					Aucun Récap trouvé pour ce mois-ci
+					Aucune commande trouvée pour le moment
 				</p>
 			) : (
 				<>
@@ -160,6 +229,38 @@ const Home = () => {
 							</tr>
 						</tbody>
 					</table>
+					<div className='flex dateInput'>
+						<label htmlFor='dateDeReception'>
+							Date de réception des fruits :
+						</label>
+						<input
+							type='date'
+							name='dateDeReception'
+							value={`${receptionDate.getFullYear()}-${(
+								'0' +
+								(receptionDate.getMonth() + 1)
+							).slice(-2)}-${(
+								'0' + receptionDate.getDate()
+							).slice(-2)}`}
+							min={`${selectedMonth.getFullYear()}-${(
+								'0' +
+								(selectedMonth.getMonth() + 1)
+							).slice(-2)}-01`}
+							onChange={(e) =>
+								setReceptionDate(new Date(e.target.value))
+							}
+						/>
+						<div
+							className='button'
+							style={{
+								marginLeft: '1em',
+								padding: '0.3em 1em',
+								borderRadius: '5px',
+							}}
+						>
+							ENREGISTRER
+						</div>
+					</div>
 					<h3>Détail par amap :</h3>
 					<table
 						style={{
@@ -195,7 +296,11 @@ const Home = () => {
 						<tbody>
 							{recaps.map((recap) => {
 								return (
-									<tr key={recap._id}>
+									<tr
+										key={recap._id}
+										onClick={() => console.log(recap._id)}
+										className='clickableRow'
+									>
 										<td>{recap.amap.groupement}</td>
 										<td>{recap.amap.name}</td>
 										{products.map((product) => {
@@ -245,11 +350,6 @@ const Home = () => {
 					</table>
 				</>
 			)}
-			<Pagination
-				pages={pages}
-				pageNumber={pageNumber}
-				setPageNumber={setPageNumber}
-			/>
 		</div>
 	)
 }

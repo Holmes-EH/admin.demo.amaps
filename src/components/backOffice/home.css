@@ -1,3 +1,9 @@
+.go {
+	color: var(--light-green);
+}
+.stop {
+	color: var(--strawberry);
+}
 .recap {
 	max-width: '1100px';
 	margin: 0 auto;
@@ -18,4 +24,22 @@
 }
 .recap h2 {
 	margin: 0 auto;
+}
+.clickableRow {
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+.clickableRow:hover {
+	color: var(--black);
+	background-color: var(--orange);
+}
+.dateInput {
+	align-items: center;
+	margin: 0 auto;
+}
+.dateInput label {
+	padding-right: 2em;
+}
+.dateInput input {
+	margin: 0;
 }

@@ -55,7 +55,7 @@ textarea {
 	padding: 0 20%;
 	background: rgb(35, 35, 35);
 	padding-bottom: 70px;
-	z-index: 10;
+	z-index: 12;
 }
 
 .danger {
