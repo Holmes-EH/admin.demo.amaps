@@ -7,7 +7,7 @@ import Loader from '../Loader/Loader'
 
 import './home.css'
 
-import { BiChevronLeft, BiChevronRight } from 'react-icons/bi'
+import { BiChevronLeft, BiChevronRight, BiPurchaseTagAlt } from 'react-icons/bi'
 
 const Home = () => {
 	const globalContext = useContext(store)
@@ -86,6 +86,54 @@ const Home = () => {
 				messageType: 'error',
 			})
 		}
+	}
+
+	const setRecapDelivery = async (_id, date) => {
+		if (date.length > 0) {
+			if (
+				window.confirm(
+					`En changeant la date de livraison, les clients de cette amap ayant commandé ce mois-ci recevront un email de notification.\nEst-ce la bonne date ?\n
+                ${new Date(date).toLocaleDateString('fr-FR', {
+					weekday: 'long',
+					day: 'numeric',
+					month: 'long',
+					year: 'numeric',
+				})}`
+				)
+			) {
+				dispatch({ type: 'LOADING' })
+				try {
+					const config = {
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+					await axios.put(
+						`${process.env.REACT_APP_API_URL}/api/orders/recaps/update`,
+						{ _id, date },
+						config
+					)
+					const recapToUpdate = recaps.filter(
+						(recap) => recap._id === _id
+					)
+					recapToUpdate.delivery = date
+					dispatch({ type: 'FINISHED_LOADING' })
+				} catch (error) {
+					dispatch({
+						type: 'MESSAGE',
+						payload:
+							error.response && error.response.data.message
+								? error.response.data.message
+								: error.message,
+						messageType: 'error',
+					})
+				}
+			}
+		}
+	}
+
+	const generateLabels = async (amap) => {
+		console.log(amap)
 	}
 
 	useEffect(() => {
@@ -293,6 +341,9 @@ const Home = () => {
 									<br />
 									<i>par Amap</i>
 								</th>
+								<th className='rowEnd recapRowEnd'>
+									Date de livraison :
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -300,7 +351,6 @@ const Home = () => {
 								return (
 									<tr
 										key={recap._id}
-										onClick={() => console.log(recap._id)}
 										className='clickableRow'
 									>
 										<td>{recap.amap.groupement}</td>
@@ -344,6 +394,48 @@ const Home = () => {
 												)}{' '}
 												kg
 											</b>
+										</td>
+										<td className='rowEnd recapRowEnd'>
+											<input
+												type='date'
+												name='dateDeLivraison'
+												value={
+													recap.delivery
+														? `${new Date(
+																recap.delivery
+														  ).getFullYear()}-${(
+																'0' +
+																(new Date(
+																	recap.delivery
+																).getMonth() +
+																	1)
+														  ).slice(-2)}-${(
+																'0' +
+																new Date(
+																	recap.delivery
+																).getDate()
+														  ).slice(-2)}`
+														: ''
+												}
+												onChange={(e) =>
+													setRecapDelivery(
+														recap._id,
+														e.target.value
+													)
+												}
+											/>
+										</td>
+										<td className='rowEnd recapRowEnd'>
+											<div
+												className='button'
+												onClick={() =>
+													generateLabels(
+														recap.amap._id
+													)
+												}
+											>
+												<BiPurchaseTagAlt />
+											</div>
 										</td>
 									</tr>
 								)

@@ -27,7 +27,7 @@ const Layout = () => {
 	return (
 		<>
 			<div
-				style={{ position: 'fixed', top: '0', left: '0', zIndex: '11' }}
+				style={{ position: 'fixed', top: '0', left: '0', zIndex: '20' }}
 			>
 				<nav>
 					<ul>

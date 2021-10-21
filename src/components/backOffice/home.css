@@ -25,14 +25,14 @@
 .recap h2 {
 	margin: 0 auto;
 }
-.clickableRow {
+/* .clickableRow {
 	cursor: pointer;
 	transition: all 0.3s ease;
 }
 .clickableRow:hover {
 	color: var(--black);
 	background-color: var(--orange);
-}
+} */
 .dateInput {
 	align-items: center;
 	margin: 0 auto;
@@ -41,5 +41,17 @@
 	padding-right: 2em;
 }
 .dateInput input {
+	margin: 0;
+}
+.rowEnd.recapRowEnd {
+	font-size: unset;
+}
+.recapRowEnd .button {
+	font-size: 2em;
+	display: flex;
+	padding: 5px;
+	border-radius: 5px;
+	justify-content: center;
+	align-items: center;
 	margin: 0;
 }

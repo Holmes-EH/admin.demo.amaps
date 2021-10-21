@@ -13,7 +13,7 @@
 	border-radius: 1em;
 	cursor: pointer;
 	text-align: center;
-	z-index: 12;
+	z-index: 21;
 	box-shadow: 1px 15px 13px var(--black);
 }
 .toast h1 {
