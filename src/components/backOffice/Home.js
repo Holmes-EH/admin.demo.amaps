@@ -116,7 +116,7 @@ const Home = () => {
 					const recapToUpdate = recaps.filter(
 						(recap) => recap._id === _id
 					)
-					recapToUpdate.delivery = date
+					recapToUpdate[0].delivery = date
 					dispatch({ type: 'FINISHED_LOADING' })
 				} catch (error) {
 					dispatch({
