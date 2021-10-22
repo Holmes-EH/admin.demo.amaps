@@ -73,6 +73,7 @@ const SingleClient = () => {
 						: error.message,
 				messageType: 'error',
 			})
+			dispatch({ type: 'FINISHED_LOADING' })
 		}
 	}
 

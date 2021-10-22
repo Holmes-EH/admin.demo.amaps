@@ -69,13 +69,15 @@ const EditOrder = ({ order, setDisplayModal, orders, setOrders }) => {
 				payload: 'Commande mise à jour avec succès !',
 				messageType: 'success',
 			})
-			dispatch({ type: 'FINISHED_LOADING' })
+
 			let newArrayofOrders = orders.filter((order) => {
 				return order._id !== data._id
 			})
 			newArrayofOrders.splice(orderIndex, 0, data)
 			setOrders(newArrayofOrders)
+			dispatch({ type: 'FINISHED_LOADING' })
 		} catch (error) {
+			dispatch({ type: 'FINISHED_LOADING' })
 			dispatch({
 				type: 'MESSAGE',
 				payload:

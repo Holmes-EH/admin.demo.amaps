@@ -48,6 +48,7 @@ const Login = () => {
 						: error.message,
 				messageType: 'error',
 			})
+			dispatch({ type: 'FINISHED_LOADING' })
 		}
 	}
 

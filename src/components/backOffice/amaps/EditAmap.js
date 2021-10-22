@@ -71,6 +71,7 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 					messageType: 'success',
 				})
 			} catch (error) {
+				dispatch({ type: 'FINISHED_LOADING' })
 				dispatch({
 					type: 'MESSAGE',
 					payload:

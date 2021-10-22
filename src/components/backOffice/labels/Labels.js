@@ -52,6 +52,7 @@ const Labels = () => {
 							: error.message,
 					messageType: 'error',
 				})
+				dispatch({ type: 'FINISHED_LOADING' })
 			}
 		}
 		getOrders()

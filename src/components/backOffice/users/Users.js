@@ -95,10 +95,10 @@ const Users = () => {
 					`${process.env.REACT_APP_API_URL}/api/users?keyword=${keyword}&pageNumber=${pageNumber}`,
 					config
 				)
-				dispatch({ type: 'FINISHED_LOADING' })
 				setPageNumber(data.page)
 				setPages(data.pages)
 				setUsers(data.users)
+				dispatch({ type: 'FINISHED_LOADING' })
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
@@ -108,6 +108,7 @@ const Users = () => {
 							: error.message,
 					messageType: 'error',
 				})
+				dispatch({ type: 'FINISHED_LOADING' })
 			}
 		}
 		getUsers()

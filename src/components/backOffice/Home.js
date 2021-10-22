@@ -204,8 +204,8 @@ Je demande juste parce qu'on fera peut-être partir un mail à tout le monde ?..
 					`${process.env.REACT_APP_API_URL}/api/orders/recaps/${selectedSession}`,
 					config
 				)
-				dispatch({ type: 'FINISHED_LOADING' })
 				setRecaps(data.sessionRecaps)
+				dispatch({ type: 'FINISHED_LOADING' })
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
@@ -215,6 +215,7 @@ Je demande juste parce qu'on fera peut-être partir un mail à tout le monde ?..
 							: error.message,
 					messageType: 'error',
 				})
+				dispatch({ type: 'FINISHED_LOADING' })
 			}
 		}
 		getRecapsBySession()
@@ -236,10 +237,11 @@ Je demande juste parce qu'on fera peut-être partir un mail à tout le monde ?..
 					`${process.env.REACT_APP_API_URL}/api/sessions?session=${selectedSession}`,
 					config
 				)
-				dispatch({ type: 'FINISHED_LOADING' })
 				setSessions(data)
+				dispatch({ type: 'FINISHED_LOADING' })
 			} catch (error) {
 				setSessions([])
+				dispatch({ type: 'FINISHED_LOADING' })
 			}
 		}
 		getSession()

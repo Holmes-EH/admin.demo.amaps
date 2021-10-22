@@ -43,7 +43,6 @@ const EditProduct = ({ product, setDisplayModal }) => {
 					payload: 'Produit mis à jour avec succès !',
 					messageType: 'success',
 				})
-				dispatch({ type: 'FINISHED_LOADING' })
 				let newArrayofProducts = products.filter((product) => {
 					return product._id !== data._id
 				})
@@ -52,6 +51,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 					type: 'SET_PRODUCT_LIST',
 					payload: newArrayofProducts,
 				})
+				dispatch({ type: 'FINISHED_LOADING' })
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
@@ -61,6 +61,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 							: error.message,
 					messageType: 'error',
 				})
+				dispatch({ type: 'FINISHED_LOADING' })
 			}
 		} else {
 			try {
@@ -94,6 +95,7 @@ const EditProduct = ({ product, setDisplayModal }) => {
 							: error.message,
 					messageType: 'error',
 				})
+				dispatch({ type: 'FINISHED_LOADING' })
 			}
 		}
 	}
