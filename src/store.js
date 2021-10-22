@@ -3,7 +3,11 @@ import { createContext, useReducer } from 'react'
 const userFromStorage =
 	JSON.parse(localStorage.getItem('juju2fruits_user')) || {}
 
-const initialState = { user: userFromStorage, products: [] }
+const initialState = {
+	user: userFromStorage,
+	products: [],
+	selectedMonth: new Date(),
+}
 const store = createContext(initialState)
 const { Provider } = store
 
@@ -34,6 +38,8 @@ const StateProvider = ({ children }) => {
 				}
 			case 'RESET_MESSAGE':
 				return { ...state, message: undefined }
+			case 'SET_SELECTED_MONTH':
+				return { ...state, selectedMonth: action.payload }
 			default:
 				throw new Error()
 		}

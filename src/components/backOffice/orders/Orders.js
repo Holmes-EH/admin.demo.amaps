@@ -21,10 +21,9 @@ import './orders.css'
 const Orders = () => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
-	const { user, message, messageType, loading, products } =
+	const { user, message, messageType, loading, products, selectedMonth } =
 		globalContext.state
 	const [orders, setOrders] = useState([])
-	const [selectedMonth, setSelectedMonth] = useState(new Date())
 	const [orderToEdit, setOrderToEdit] = useState({})
 	const [pageNumber, setPageNumber] = useState(1)
 	const [pages, setPages] = useState(1)
@@ -37,15 +36,21 @@ const Orders = () => {
 
 	const decrementDate = () => {
 		setPageNumber(1)
-		setSelectedMonth(
-			new Date(selectedMonth.setMonth(selectedMonth.getMonth() - 1))
-		)
+		dispatch({
+			type: 'SET_SELECTED_MONTH',
+			payload: new Date(
+				selectedMonth.setMonth(selectedMonth.getMonth() - 1)
+			),
+		})
 	}
 	const incrementDate = () => {
 		setPageNumber(1)
-		setSelectedMonth(
-			new Date(selectedMonth.setMonth(selectedMonth.getMonth() + 1))
-		)
+		dispatch({
+			type: 'SET_SELECTED_MONTH',
+			payload: new Date(
+				selectedMonth.setMonth(selectedMonth.getMonth() + 1)
+			),
+		})
 	}
 
 	const editOrder = (index, order) => {
