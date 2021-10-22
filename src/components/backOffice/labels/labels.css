@@ -1,7 +1,13 @@
 .etiquette {
-	margin: 1em;
+	margin: 1em auto;
 }
 .etiquette th,
 .etiquette td {
 	padding: 5px;
+}
+.download {
+	font-size: 2em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

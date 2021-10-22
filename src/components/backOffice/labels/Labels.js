@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import { store } from '../../../store'
 import { useParams } from 'react-router-dom'
+import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 
 import axios from 'axios'
 
+import { BiDownload } from 'react-icons/bi'
 import './labels.css'
 
 const Labels = () => {
@@ -59,59 +61,70 @@ const Labels = () => {
 			{loading ? (
 				<p>Loading</p>
 			) : (
-				orders.map((order) => {
-					return (
-						<table key={order._id} className='etiquette'>
-							<tbody>
-								<tr>
-									<th colSpan={order.details.length}>
-										{order.client.name}
-									</th>
-									<td>{order.paid ? 'P' : 'NP'}</td>
-								</tr>
+				<div>
+					<ReactHTMLTableToExcel
+						id='testiquettes'
+						className='button download'
+						table='etiquettes'
+						filename='tablexls'
+						sheet='tablexls'
+						buttonText={<BiDownload />}
+					/>
+					<table className='etiquette' id='etiquettes'>
+						{orders.map((order, index) => {
+							return (
+								<tbody key={order._id}>
+									<tr>
+										<th colSpan={order.details.length}>
+											{order.client.name}
+										</th>
+										<td>{order.paid ? 'P' : 'NP'}</td>
+									</tr>
 
-								<tr>
-									{order.details.map((detail) => {
-										return (
-											<td key={`title-${detail._id}`}>
-												{detail.product.title.toLowerCase() ===
-												'mangues'
-													? 'Mg'
-													: detail.product.title.toLowerCase() ===
-													  'mandarines'
-													? 'Md'
-													: detail.product.title.substring(
-															0,
-															2
-													  )}
-											</td>
-										)
-									})}
-									<td>
-										{order.details
-											.reduce(getOrderTotal, 0)
-											.toFixed(2)}
-									</td>
-								</tr>
-								<tr>
-									{order.details.map((detail) => {
-										return (
-											<td key={`qty-${detail._id}`}>
-												{detail.quantity}
-											</td>
-										)
-									})}
-									<td>
-										{order.details.reduce(
-											getRecapTotalWeight,
-											0
-										)}
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					)
-				})
+									<tr>
+										{order.details.map((detail) => {
+											return (
+												<td key={`title-${detail._id}`}>
+													{detail.product.title.toLowerCase() ===
+													'mangues'
+														? 'Mg'
+														: detail.product.title.toLowerCase() ===
+														  'mandarines'
+														? 'Md'
+														: detail.product.title.substring(
+																0,
+																2
+														  )}
+												</td>
+											)
+										})}
+										<td>
+											{order.details
+												.reduce(getOrderTotal, 0)
+												.toFixed(2)}
+										</td>
+									</tr>
+									<tr>
+										{order.details.map((detail) => {
+											return (
+												<td key={`qty-${detail._id}`}>
+													{detail.quantity}
+												</td>
+											)
+										})}
+										<td>
+											{order.details.reduce(
+												getRecapTotalWeight,
+												0
+											)}
+										</td>
+									</tr>
+									<tr style={{ height: '5px' }}></tr>
+								</tbody>
+							)
+						})}
+					</table>
+				</div>
 			)}
 		</div>
 	)

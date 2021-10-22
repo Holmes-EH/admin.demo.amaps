@@ -15,26 +15,29 @@ const Home = () => {
 	const history = useHistory()
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
-	const { user, message, messageType, loading, products } =
+	const { user, message, messageType, loading, products, selectedMonth } =
 		globalContext.state
 	const [recaps, setRecaps] = useState([])
 	const [sessions, setSessions] = useState([])
-	const [selectedMonth, setSelectedMonth] = useState(new Date())
 	const [receptionDate, setReceptionDate] = useState(
 		sessions.receptionDate || selectedMonth
 	)
 
 	const decrementDate = () => {
-		setSelectedMonth(
-			new Date(selectedMonth.setMonth(selectedMonth.getMonth() - 1))
-		)
-		setReceptionDate(selectedMonth)
+		dispatch({
+			type: 'SET_SELECTED_MONTH',
+			payload: new Date(
+				selectedMonth.setMonth(selectedMonth.getMonth() - 1)
+			),
+		})
 	}
 	const incrementDate = () => {
-		setSelectedMonth(
-			new Date(selectedMonth.setMonth(selectedMonth.getMonth() + 1))
-		)
-		setReceptionDate(selectedMonth)
+		dispatch({
+			type: 'SET_SELECTED_MONTH',
+			payload: new Date(
+				selectedMonth.setMonth(selectedMonth.getMonth() + 1)
+			),
+		})
 	}
 
 	const getRecapTotalWeight = (total, product) => {
@@ -141,12 +144,13 @@ const Home = () => {
 		if (
 			window.confirm(
 				`Est-ce la bonne date ?\n
-            ${new Date(date).toLocaleDateString('fr-FR', {
-				weekday: 'long',
-				day: 'numeric',
-				month: 'long',
-				year: 'numeric',
-			})}`
+    ->  ${new Date(date).toLocaleDateString('fr-FR', {
+		weekday: 'long',
+		day: 'numeric',
+		month: 'long',
+		year: 'numeric',
+	})}\n
+Je demande juste parce qu'on fera peut-être partir un mail à tout le monde ?...`
 			)
 		) {
 			setReceptionDate(new Date(date))
