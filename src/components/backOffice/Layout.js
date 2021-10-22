@@ -8,6 +8,7 @@ import Products from './products/Products'
 import Orders from './orders/Orders'
 import Users from './users/Users'
 import SingleClient from './users/SingleClient'
+import Labels from './labels/Labels'
 import Lemon from '../Lemon'
 import { BiLogOut } from 'react-icons/bi'
 import './layout.css'
@@ -90,7 +91,9 @@ const Layout = () => {
 				<Route path='/amaps'>
 					<Amaps />
 				</Route>
-
+				<Route path='/etiquettes/:amap/:session'>
+					<Labels />
+				</Route>
 				<Route path='/commandes'>
 					<Orders />
 				</Route>

@@ -5,11 +5,14 @@ import axios from 'axios'
 import Toaster from '../Toaster'
 import Loader from '../Loader/Loader'
 
+import { useHistory } from 'react-router-dom'
+
 import './home.css'
 
 import { BiChevronLeft, BiChevronRight, BiPurchaseTagAlt } from 'react-icons/bi'
 
 const Home = () => {
+	const history = useHistory()
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user, message, messageType, loading, products } =
@@ -17,7 +20,9 @@ const Home = () => {
 	const [recaps, setRecaps] = useState([])
 	const [sessions, setSessions] = useState([])
 	const [selectedMonth, setSelectedMonth] = useState(new Date())
-	const [receptionDate, setReceptionDate] = useState(selectedMonth)
+	const [receptionDate, setReceptionDate] = useState(
+		sessions.receptionDate || selectedMonth
+	)
 
 	const decrementDate = () => {
 		setSelectedMonth(
@@ -132,8 +137,51 @@ const Home = () => {
 		}
 	}
 
+	const saveReceptionDate = async (_id, date) => {
+		if (
+			window.confirm(
+				`Est-ce la bonne date ?\n
+            ${new Date(date).toLocaleDateString('fr-FR', {
+				weekday: 'long',
+				day: 'numeric',
+				month: 'long',
+				year: 'numeric',
+			})}`
+			)
+		) {
+			setReceptionDate(new Date(date))
+			dispatch({ type: 'LOADING' })
+			try {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+				const { data } = await axios.put(
+					`${process.env.REACT_APP_API_URL}/api/sessions`,
+					{ _id, receptionDate: new Date(date) },
+					config
+				)
+				setSessions(data)
+				dispatch({ type: 'FINISHED_LOADING' })
+			} catch (error) {
+				dispatch({
+					type: 'MESSAGE',
+					payload:
+						error.response && error.response.data.message
+							? error.response.data.message
+							: error.message,
+					messageType: 'error',
+				})
+			}
+		}
+	}
+
 	const generateLabels = async (amap) => {
-		console.log(amap)
+		const selectedSession =
+			selectedMonth.getFullYear().toString() +
+			('0' + (selectedMonth.getMonth() + 1)).slice(-2)
+		history.push(`/etiquettes/${amap}/${selectedSession}`)
 	}
 
 	useEffect(() => {
@@ -296,20 +344,10 @@ const Home = () => {
 								'0' +
 								(selectedMonth.getMonth() + 1)
 							).slice(-2)}-01`}
-							onChange={(e) =>
-								setReceptionDate(new Date(e.target.value))
-							}
-						/>
-						<div
-							className='button'
-							style={{
-								marginLeft: '1em',
-								padding: '0.3em 1em',
-								borderRadius: '5px',
+							onChange={(e) => {
+								saveReceptionDate(sessions._id, e.target.value)
 							}}
-						>
-							ENREGISTRER
-						</div>
+						/>
 					</div>
 					<h3>Détail par amap :</h3>
 					<table

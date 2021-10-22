@@ -1,0 +1,7 @@
+.etiquette {
+	margin: 1em;
+}
+.etiquette th,
+.etiquette td {
+	padding: 5px;
+}
