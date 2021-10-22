@@ -5,6 +5,7 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 
 import axios from 'axios'
 
+import Loader from '../../Loader/Loader'
 import { BiDownload } from 'react-icons/bi'
 import './labels.css'
 
@@ -59,7 +60,7 @@ const Labels = () => {
 	return (
 		<div>
 			{loading ? (
-				<p>Loading</p>
+				<Loader />
 			) : (
 				<div>
 					<ReactHTMLTableToExcel
