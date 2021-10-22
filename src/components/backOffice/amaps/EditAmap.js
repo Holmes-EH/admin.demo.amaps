@@ -38,6 +38,7 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 			},
 		}
 		if (id.length > 0) {
+			const filtered = emails.filter((email) => email.email.length !== 0)
 			try {
 				const { data } = await axios.put(
 					`${process.env.REACT_APP_API_URL}/api/amaps`,
@@ -45,7 +46,7 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 						id,
 						name,
 						contact: {
-							emails,
+							emails: filtered,
 							tel,
 							address: {
 								street,
@@ -58,17 +59,17 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 					config
 				)
 				setDisplayModal(false)
+				dispatch({ type: 'FINISHED_LOADING' })
+				amaps.forEach((amap, index) => {
+					if (amap._id === data._id) {
+						amaps[index] = data
+					}
+				})
 				dispatch({
 					type: 'MESSAGE',
 					payload: 'Amap mise à jour avec succès !',
 					messageType: 'success',
 				})
-				dispatch({ type: 'FINISHED_LOADING' })
-				let newArrayOfAmaps = amaps.filter((amap) => {
-					return amap._id !== data._id
-				})
-				newArrayOfAmaps.unshift(data)
-				setAmaps(newArrayOfAmaps)
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
