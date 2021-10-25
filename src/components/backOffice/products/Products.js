@@ -12,8 +12,6 @@ import {
 	BiMinusCircle,
 } from 'react-icons/bi'
 
-import './products.css'
-
 const Products = () => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
