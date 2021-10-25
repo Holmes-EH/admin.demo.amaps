@@ -1,12 +1,10 @@
 import { useContext, useEffect, useState } from 'react'
 import { store } from '../../../store'
 import { useParams } from 'react-router-dom'
-import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 
 import axios from 'axios'
 
 import Loader from '../../Loader/Loader'
-import { BiDownload } from 'react-icons/bi'
 import './labels.css'
 
 const Labels = () => {
@@ -63,19 +61,11 @@ const Labels = () => {
 			{loading ? (
 				<Loader />
 			) : (
-				<div>
-					<ReactHTMLTableToExcel
-						id='testiquettes'
-						className='button download'
-						table='etiquettes'
-						filename='tablexls'
-						sheet='tablexls'
-						buttonText={<BiDownload />}
-					/>
-					<table className='etiquette' id='etiquettes'>
-						{orders.map((order, index) => {
-							return (
-								<tbody key={order._id}>
+				<div className='tablesContainer'>
+					{orders.map((order, index) => {
+						return (
+							<table className='etiquette' key={order._id}>
+								<tbody>
 									<tr>
 										<th colSpan={order.details.length}>
 											{order.client.name}
@@ -123,9 +113,9 @@ const Labels = () => {
 									</tr>
 									<tr style={{ height: '5px' }}></tr>
 								</tbody>
-							)
-						})}
-					</table>
+							</table>
+						)
+					})}
 				</div>
 			)}
 		</div>

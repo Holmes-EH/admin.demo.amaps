@@ -1,3 +1,10 @@
+.tablesContainer {
+	display: grid;
+	grid-template-columns: repeat(4, 230px);
+	column-gap: 1em;
+	max-width: 1000px;
+	margin: auto;
+}
 .etiquette {
 	margin: 1em auto;
 }
