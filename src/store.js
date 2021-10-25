@@ -15,9 +15,9 @@ const StateProvider = ({ children }) => {
 	const [state, dispatch] = useReducer((state, action) => {
 		switch (action.type) {
 			case 'USER_LOGIN':
-				return { user: action.payload }
+				return { ...state, user: action.payload }
 			case 'RESET_USER_LOGIN':
-				return { user: {} }
+				return { ...state, user: {} }
 			case 'LOADING': {
 				return { ...state, loading: true }
 			}
