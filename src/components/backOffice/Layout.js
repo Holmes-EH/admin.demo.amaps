@@ -16,7 +16,6 @@ import './layout.css'
 const Layout = () => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
-	const { user } = globalContext.state
 
 	const disconnectUser = () => {
 		localStorage.removeItem('juju2fruits_user')
@@ -36,52 +35,24 @@ const Layout = () => {
 							<Link to='/'>
 								<Lemon />
 							</Link>
-							<div className='user'>
-								<p>B'jour {user.name}</p>
-								<div
-									className='disconnect'
-									onClick={disconnectUser}
-								>
-									<BiLogOut style={{ marginRight: '1em' }} />
-									Déconnexion
-								</div>
-							</div>
 						</li>
-						<div
-							className='flex'
-							style={{
-								justifyContent: 'space-between',
-								margin: 'auto 4em auto auto',
-								flexGrow: '1',
-								maxWidth: '80ch',
-							}}
-						>
-							<li
-								className={
-									curUrl === '/produits' ? 'active' : ''
-								}
-							>
-								<Link to='/produits'>Produits</Link>
-							</li>
-							<li className={curUrl === '/amaps' ? 'active' : ''}>
-								<Link to='/amaps'>Amaps</Link>
-							</li>
-							<li
-								className={
-									curUrl === '/commandes' ? 'active' : ''
-								}
-							>
-								<Link to='/commandes'>Commandes</Link>
-							</li>
-							<li
-								className={
-									curUrl === '/clients' ? 'active' : ''
-								}
-							>
-								<Link to='/clients'>Utilisateurs</Link>
-							</li>
-						</div>
+
+						<li className={curUrl === '/produits' ? 'active' : ''}>
+							<Link to='/produits'>Produits</Link>
+						</li>
+						<li className={curUrl === '/amaps' ? 'active' : ''}>
+							<Link to='/amaps'>Amaps</Link>
+						</li>
+						<li className={curUrl === '/commandes' ? 'active' : ''}>
+							<Link to='/commandes'>Commandes</Link>
+						</li>
+						<li className={curUrl === '/clients' ? 'active' : ''}>
+							<Link to='/clients'>Utilisateurs</Link>
+						</li>
 					</ul>
+					<div className='disconnect' onClick={disconnectUser}>
+						<BiLogOut style={{ marginRight: '1em' }} />
+					</div>
 				</nav>
 			</div>
 			<Switch>

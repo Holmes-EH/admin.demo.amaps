@@ -1,6 +1,9 @@
+/** file: /components/backOffice/layout.css **/
 nav {
 	width: 100vw;
 	background-color: var(--lemon);
+	display: flex;
+	align-items: center;
 }
 nav .lemonText {
 	display: none;
@@ -9,7 +12,6 @@ nav .lemonText {
 	cursor: pointer;
 	display: flex;
 	align-items: center;
-	margin-right: 3em;
 	position: relative;
 }
 .orange {
@@ -18,7 +20,6 @@ nav .lemonText {
 nav svg {
 	max-height: 45px;
 	margin: auto;
-	margin-right: 3em;
 }
 nav ul {
 	width: 100%;
@@ -28,8 +29,12 @@ nav ul {
 	display: flex;
 	justify-content: space-evenly;
 	align-items: center;
+	padding-left: 0;
 }
-
+nav li {
+	width: 100%;
+	text-align: center;
+}
 nav a {
 	text-decoration: none;
 	text-transform: uppercase;
@@ -41,11 +46,12 @@ nav h3,
 nav p {
 	margin: 0;
 }
+
 nav p {
 	color: var(--black);
 	margin-right: auto;
 }
-nav a::after {
+nav a:not(.logoLink a)::after {
 	content: '';
 	position: absolute;
 	bottom: 0;
@@ -72,26 +78,19 @@ nav a:not(.logoLink a):hover::after {
 	transform: scaleX(1);
 	background: var(--sanguine);
 }
-
+.logoLink a {
+	margin: auto;
+}
 .logoLink a:hover path.orange {
 	fill: var(--sanguine);
 }
-.user {
-	position: relative;
-}
 .disconnect {
-	position: absolute;
+	cursor: pointer;
+	display: flex;
 	color: var(--black);
-	font-weight: 700;
-	display: none;
-	background: var(--lemon);
+	font-size: 1.5em;
 	padding: 1em;
-	border-radius: 10px;
 }
-.user:hover .disconnect {
-	display: flex;
+.disconnect:hover {
 	color: var(--sanguine);
-}
-.logoLink p:hover + .disconnect {
-	display: flex;
 }
