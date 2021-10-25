@@ -1,3 +1,8 @@
+/** file: /components/backOffice/home.css **/
+
+.topSection {
+	align-items: center;
+}
 .go {
 	color: var(--light-green);
 }
@@ -25,14 +30,6 @@
 .recap h2 {
 	margin: 0 auto;
 }
-/* .clickableRow {
-	cursor: pointer;
-	transition: all 0.3s ease;
-}
-.clickableRow:hover {
-	color: var(--black);
-	background-color: var(--orange);
-} */
 .dateInput {
 	align-items: center;
 	margin: 0 auto;

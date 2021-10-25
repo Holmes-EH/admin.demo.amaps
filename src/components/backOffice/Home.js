@@ -19,9 +19,6 @@ const Home = () => {
 		globalContext.state
 	const [recaps, setRecaps] = useState([])
 	const [sessions, setSessions] = useState([])
-	const [receptionDate, setReceptionDate] = useState(
-		sessions.receptionDate || selectedMonth
-	)
 
 	const decrementDate = () => {
 		dispatch({
@@ -84,6 +81,12 @@ const Home = () => {
 			)
 			dispatch({ type: 'FINISHED_LOADING' })
 			setSessions(data.sessions)
+			dispatch({
+				type: 'SET_SELECTED_MONTH',
+				payload: new Date(
+					selectedMonth.setMonth(selectedMonth.getMonth())
+				),
+			})
 		} catch (error) {
 			dispatch({
 				type: 'MESSAGE',
@@ -98,62 +101,6 @@ const Home = () => {
 
 	const setRecapDelivery = async (_id, date) => {
 		if (date.length > 0) {
-			if (
-				window.confirm(
-					`En changeant la date de livraison, les clients de cette amap ayant commandé ce mois-ci recevront un email de notification.\nEst-ce la bonne date ?\n
-                ${new Date(date).toLocaleDateString('fr-FR', {
-					weekday: 'long',
-					day: 'numeric',
-					month: 'long',
-					year: 'numeric',
-				})}`
-				)
-			) {
-				dispatch({ type: 'LOADING' })
-				try {
-					const config = {
-						headers: {
-							Authorization: `Bearer ${user.token}`,
-						},
-					}
-					await axios.put(
-						`${process.env.REACT_APP_API_URL}/api/orders/recaps/update`,
-						{ _id, date },
-						config
-					)
-					const recapToUpdate = recaps.filter(
-						(recap) => recap._id === _id
-					)
-					recapToUpdate[0].delivery = date
-					dispatch({ type: 'FINISHED_LOADING' })
-				} catch (error) {
-					dispatch({
-						type: 'MESSAGE',
-						payload:
-							error.response && error.response.data.message
-								? error.response.data.message
-								: error.message,
-						messageType: 'error',
-					})
-				}
-			}
-		}
-	}
-
-	const saveReceptionDate = async (_id, date) => {
-		if (
-			window.confirm(
-				`Est-ce la bonne date ?\n
-    ->  ${new Date(date).toLocaleDateString('fr-FR', {
-		weekday: 'long',
-		day: 'numeric',
-		month: 'long',
-		year: 'numeric',
-	})}\n
-Je demande juste parce qu'on fera peut-être partir un mail à tout le monde ?...`
-			)
-		) {
-			setReceptionDate(new Date(date))
 			dispatch({ type: 'LOADING' })
 			try {
 				const config = {
@@ -161,12 +108,15 @@ Je demande juste parce qu'on fera peut-être partir un mail à tout le monde ?..
 						Authorization: `Bearer ${user.token}`,
 					},
 				}
-				const { data } = await axios.put(
-					`${process.env.REACT_APP_API_URL}/api/sessions`,
-					{ _id, receptionDate: new Date(date) },
+				await axios.put(
+					`${process.env.REACT_APP_API_URL}/api/orders/recaps/update`,
+					{ _id, date },
 					config
 				)
-				setSessions(data)
+				const recapToUpdate = recaps.filter(
+					(recap) => recap._id === _id
+				)
+				recapToUpdate[0].delivery = date
 				dispatch({ type: 'FINISHED_LOADING' })
 			} catch (error) {
 				dispatch({
@@ -178,6 +128,60 @@ Je demande juste parce qu'on fera peut-être partir un mail à tout le monde ?..
 					messageType: 'error',
 				})
 			}
+		}
+	}
+
+	const updateNews = async (_id) => {
+		dispatch({ type: 'LOADING' })
+		try {
+			const config = {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			}
+			const { data } = await axios.put(
+				`${process.env.REACT_APP_API_URL}/api/sessions`,
+				{ _id, news: sessions.news },
+				config
+			)
+			setSessions(data)
+			dispatch({ type: 'FINISHED_LOADING' })
+		} catch (error) {
+			dispatch({
+				type: 'MESSAGE',
+				payload:
+					error.response && error.response.data.message
+						? error.response.data.message
+						: error.message,
+				messageType: 'error',
+			})
+		}
+	}
+
+	const saveReceptionDate = async (_id, date) => {
+		dispatch({ type: 'LOADING' })
+		try {
+			const config = {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			}
+			const { data } = await axios.put(
+				`${process.env.REACT_APP_API_URL}/api/sessions`,
+				{ _id, lastOrderDate: new Date(date) },
+				config
+			)
+			setSessions(data)
+			dispatch({ type: 'FINISHED_LOADING' })
+		} catch (error) {
+			dispatch({
+				type: 'MESSAGE',
+				payload:
+					error.response && error.response.data.message
+						? error.response.data.message
+						: error.message,
+				messageType: 'error',
+			})
 		}
 	}
 
@@ -289,72 +293,125 @@ Je demande juste parce qu'on fera peut-être partir un mail à tout le monde ?..
 				</p>
 			) : (
 				<>
-					<h3>Total toutes amaps :</h3>
-					<table
-						style={{
-							minWidth: '780px',
-
-							margin: '0 auto',
-							marginBottom: '2em',
-						}}
-					>
-						<thead>
-							<tr>
-								{products.map((product) => {
-									return (
-										<th key={product._id}>
-											<b>
-												{product.title}{' '}
-												{product.title.toLowerCase() ===
-												'mangues'
-													? '(pcs)'
-													: '(kg)'}
-											</b>
-										</th>
-									)
-								})}
-								<th>Poids Total</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								{products.map((product) => {
-									return (
-										<td key={`total-${product._id}`}>
-											{getSessionTotalWeightPerProduct(
-												product
-											)}
-										</td>
-									)
-								})}
-								<td>
-									<b>{getSessionTotalWeight()} kg</b>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div className='flex dateInput'>
-						<label htmlFor='dateDeReception'>
-							Date de réception des fruits :
-						</label>
-						<input
-							type='date'
-							name='dateDeReception'
-							value={`${receptionDate.getFullYear()}-${(
-								'0' +
-								(receptionDate.getMonth() + 1)
-							).slice(-2)}-${(
-								'0' + receptionDate.getDate()
-							).slice(-2)}`}
-							min={`${selectedMonth.getFullYear()}-${(
-								'0' +
-								(selectedMonth.getMonth() + 1)
-							).slice(-2)}-01`}
-							onChange={(e) => {
-								saveReceptionDate(sessions._id, e.target.value)
+					<div className='topSection flex'>
+						<div
+							className='flex column'
+							style={{ margin: 'auto', marginRight: '1em' }}
+						>
+							<h3>Infos du mois :</h3>
+							<textarea
+								name='news'
+								cols='60'
+								rows='10'
+								value={sessions.news}
+								onChange={(e) =>
+									setSessions(() => {
+										let sessionsToUpdate = { ...sessions }
+										sessionsToUpdate.news = e.target.value
+										return { ...sessionsToUpdate }
+									})
+								}
+							></textarea>
+							<button
+								className='button save'
+								onClick={() => updateNews(sessions._id)}
+							>
+								Enregistrer
+							</button>
+						</div>
+						<div
+							className='flex column'
+							style={{
+								height: '100%',
+								justifyContent: 'space-around',
 							}}
-						/>
+						>
+							<h3>Total toutes amaps :</h3>
+							<table
+								style={{
+									minWidth: '780px',
+
+									margin: '0 auto',
+									marginBottom: '2em',
+								}}
+							>
+								<thead>
+									<tr>
+										{products.map((product) => {
+											return (
+												<th key={product._id}>
+													<b>
+														{product.title}{' '}
+														{product.title.toLowerCase() ===
+														'mangues'
+															? '(pcs)'
+															: '(kg)'}
+													</b>
+												</th>
+											)
+										})}
+										<th>Poids Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										{products.map((product) => {
+											return (
+												<td
+													key={`total-${product._id}`}
+												>
+													{getSessionTotalWeightPerProduct(
+														product
+													)}
+												</td>
+											)
+										})}
+										<td>
+											<b>{getSessionTotalWeight()} kg</b>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<div className='flex dateInput'>
+								<label htmlFor='dateDeReception'>
+									Date limite de commande :
+								</label>
+								<input
+									type='date'
+									name='dateDeReception'
+									value={
+										sessions.lastOrderDate
+											? `${new Date(
+													sessions.lastOrderDate
+											  ).getFullYear()}-${(
+													'0' +
+													(new Date(
+														sessions.lastOrderDate
+													).getMonth() +
+														1)
+											  ).slice(-2)}-${(
+													'0' +
+													new Date(
+														sessions.lastOrderDate
+													).getDate()
+											  ).slice(-2)}`
+											: ''
+									}
+									min={`${selectedMonth.getFullYear()}-${(
+										'0' +
+										(selectedMonth.getMonth() + 1)
+									).slice(-2)}-01`}
+									onChange={(e) => {
+										saveReceptionDate(
+											sessions._id,
+											e.target.value
+										)
+									}}
+								/>
+							</div>
+						</div>
 					</div>
+					<hr style={{ width: '100%' }} />
 					<h3>Détail par amap :</h3>
 					<table
 						style={{
