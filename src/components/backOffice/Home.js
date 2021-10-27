@@ -99,6 +99,54 @@ const Home = () => {
 		}
 	}
 
+	const deleteSession = async (id) => {
+		if (
+			window.confirm(
+				`Est-tu sûr ?\nAucune autre commande ne pourra être passée pour le mois de : ${selectedMonth.toLocaleDateString(
+					'fr-FR',
+					{ month: 'long', year: 'numeric' }
+				)}`
+			)
+		) {
+			dispatch({ type: 'LOADING' })
+			try {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+				console.log(config)
+				const { data } = await axios.delete(
+					`${process.env.REACT_APP_API_URL}/api/sessions`,
+					{
+						data: { _id: id },
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				)
+				setRecaps([])
+				setSessions([])
+				dispatch({ type: 'FINISHED_LOADING' })
+				dispatch({
+					type: 'MESSAGE',
+					payload: data.message,
+					messageType: 'success',
+				})
+			} catch (error) {
+				dispatch({ type: 'FINISHED_LOADING' })
+				dispatch({
+					type: 'MESSAGE',
+					payload:
+						error.response && error.response.data.message
+							? error.response.data.message
+							: error.message,
+					messageType: 'error',
+				})
+			}
+		}
+	}
+
 	const setRecapDelivery = async (_id, date) => {
 		if (date.length > 0) {
 			dispatch({ type: 'LOADING' })
@@ -543,6 +591,13 @@ const Home = () => {
 							})}
 						</tbody>
 					</table>
+					<button
+						className='button danger'
+						style={{ border: 'none' }}
+						onClick={() => deleteSession(sessions._id)}
+					>
+						SUPPRIMER
+					</button>
 				</>
 			)}
 		</div>
