@@ -10,7 +10,7 @@ h1 {
 .monthSelect {
 	position: absolute;
 	right: 4em;
-	top: 0.9em;
+	top: 1.2em;
 	width: 300px;
 	display: flex;
 	justify-content: space-between;
@@ -29,4 +29,25 @@ h1 {
 }
 .paidStatus {
 	cursor: pointer;
+}
+.orderSearch {
+	position: absolute;
+	left: 4em;
+	top: 0.5em;
+	width: 250px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-weight: bold;
+	z-index: 9;
+}
+.orderSearch button {
+	border: none;
+	display: flex;
+	align-items: center;
+	background: none;
+	font-size: 2em;
+	margin: auto;
+	cursor: pointer;
+	transition: all 0.2s ease;
 }

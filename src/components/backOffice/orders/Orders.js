@@ -5,11 +5,12 @@ import axios from 'axios'
 import EditOrder from './EditOrder'
 import Toaster from '../../Toaster'
 import Loader from '../../Loader/Loader'
-import Pagination from '../../Pagination'
 
 import {
 	BiEdit,
 	BiTrash,
+	BiSearchAlt2,
+	BiX,
 	BiChevronLeft,
 	BiChevronRight,
 	BiCheckCircle,
@@ -25,17 +26,29 @@ const Orders = () => {
 		globalContext.state
 	const [orders, setOrders] = useState([])
 	const [orderToEdit, setOrderToEdit] = useState({})
-	const [pageNumber, setPageNumber] = useState(1)
-	const [pages, setPages] = useState(1)
+
+	const [amaps, setAmaps] = useState([])
+	const [amap, setAmap] = useState('')
+	const [tempName, setTempName] = useState('')
+	const [clientName, setClientName] = useState('')
 
 	const [displayModal, setDisplayModal] = useState(false)
+
+	const search = (e) => {
+		e.preventDefault()
+		setClientName(tempName)
+	}
+	const resetSearch = (e) => {
+		e.preventDefault()
+		setTempName('')
+		setClientName('')
+	}
 
 	const getOrderTotal = (total, detail) => {
 		return total + detail.quantity * detail.product.pricePerKg
 	}
 
 	const decrementDate = () => {
-		setPageNumber(1)
 		dispatch({
 			type: 'SET_SELECTED_MONTH',
 			payload: new Date(
@@ -44,7 +57,6 @@ const Orders = () => {
 		})
 	}
 	const incrementDate = () => {
-		setPageNumber(1)
 		dispatch({
 			type: 'SET_SELECTED_MONTH',
 			payload: new Date(
@@ -134,6 +146,31 @@ const Orders = () => {
 	}
 
 	useEffect(() => {
+		const getAmaps = async () => {
+			dispatch({ type: 'LOADING' })
+			try {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+				const { data } = await axios.get(
+					`${process.env.REACT_APP_API_URL}/api/amaps`,
+					config
+				)
+				dispatch({ type: 'FINISHED_LOADING' })
+				setAmaps(data)
+			} catch (error) {
+				dispatch({
+					type: 'MESSAGE',
+					payload:
+						error.response && error.response.data.message
+							? error.response.data.message
+							: error.message,
+					messageType: 'error',
+				})
+			}
+		}
 		const getOrdersBySession = async () => {
 			dispatch({ type: 'LOADING' })
 			const selectedSession =
@@ -146,29 +183,69 @@ const Orders = () => {
 					},
 				}
 				const { data } = await axios.get(
-					`${process.env.REACT_APP_API_URL}/api/orders/session/${selectedSession}?pageNumber=${pageNumber}`,
+					`${process.env.REACT_APP_API_URL}/api/orders?session=${selectedSession}&clientName=${clientName}&amap=${amap}`,
 					config
 				)
 				dispatch({ type: 'FINISHED_LOADING' })
-				setPageNumber(data.page)
-				setPages(data.pages)
-				setOrders(data.sessionOrders)
+				setOrders(data.allOrders)
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',
 					payload:
-						error.response && error.response.data.error
-							? error.response.data.error
+						error.response && error.response.data.message
+							? error.response.data.message
 							: error.message,
 					messageType: 'error',
 				})
 			}
 		}
+		getAmaps()
 		getOrdersBySession()
-	}, [dispatch, user.token, selectedMonth, pageNumber])
+	}, [dispatch, user.token, selectedMonth, clientName, amap])
 
 	return (
 		<div className='flex column container'>
+			<div className='flex column orderSearch'>
+				<form className='flex searchForm'>
+					<button onClick={(e) => search(e)} className='searchButton'>
+						<BiSearchAlt2 />
+					</button>
+					<input
+						type='text'
+						name='search'
+						placeholder='Rechercher par nom'
+						value={tempName}
+						onChange={(e) => setTempName(e.target.value)}
+						style={{ margin: 'auto', border: 'none' }}
+					/>
+					<button
+						className='resetSearch'
+						onClick={(e) => resetSearch(e)}
+					>
+						<BiX />
+					</button>
+				</form>
+				<form
+					className='flex searchForm'
+					style={{ width: '100%', justifyContent: 'space-around' }}
+					onChange={(e) => setAmap(e.target.value)}
+				>
+					<p style={{ margin: 'auto' }}>Amap :</p>
+					<select
+						name='amap'
+						style={{ margin: 'auto', border: 'none' }}
+					>
+						<option value=''>Toutes</option>
+						{amaps.map((amap) => {
+							return (
+								<option value={amap._id} key={amap._id}>
+									{amap.name}
+								</option>
+							)
+						})}
+					</select>
+				</form>
+			</div>
 			<h1>Commandes</h1>
 			{displayModal && (
 				<EditOrder
@@ -192,8 +269,7 @@ const Orders = () => {
 					onClick={incrementDate}
 				/>
 			</div>
-
-			{orders && (
+			{orders && orders.length !== 0 ? (
 				<table
 					style={{
 						minWidth: '780px',
@@ -320,17 +396,11 @@ const Orders = () => {
 						})}
 					</tbody>
 				</table>
-			)}
-			{orders.length === 0 && (
+			) : (
 				<p style={{ textAlign: 'center' }}>
-					Aucune Commande trouvée pour ce mois-ci
+					Aucune Commande trouvée...
 				</p>
 			)}
-			<Pagination
-				pages={pages}
-				pageNumber={pageNumber}
-				setPageNumber={setPageNumber}
-			/>
 		</div>
 	)
 }
