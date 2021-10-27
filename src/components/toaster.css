@@ -16,6 +16,8 @@
 	cursor: pointer;
 	text-align: center;
 	z-index: 21;
+	position: fixed;
+	top: 1em;
 	box-shadow: 1px 15px 13px var(--black);
 }
 .toast h1 {
