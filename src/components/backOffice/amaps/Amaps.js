@@ -16,6 +16,19 @@ const Amaps = () => {
 	const [displayModal, setDisplayModal] = useState(false)
 	const [amapToEdit, setAmapToEdit] = useState()
 
+	const displayDayOfWeek = (weekday) => {
+		const weekdays = [
+			'Lundi',
+			'Mardi',
+			'Mercredi',
+			'Jeudi',
+			'Vendredi',
+			'Samedi',
+			'Dimanche',
+		]
+		return weekdays[weekday]
+	}
+
 	const deleteAmap = async (id, name) => {
 		if (
 			window.confirm(
@@ -136,6 +149,8 @@ const Amaps = () => {
 								<th>Nom</th>
 								<th>Lieu</th>
 								<th>Contacts</th>
+								<th>Jour de distribution</th>
+								<th>Heure de distribution</th>
 								<th>Code d'accès</th>
 								<th
 									className='rowEnd'
@@ -163,11 +178,24 @@ const Amaps = () => {
 											<b>{amap.name}</b>
 										</td>
 										<td>
-											{amap.contact.address.street}
-											<br />
-											{
-												amap.contact.address.postalCode
-											}{' '}
+											{amap.contact.address.street && (
+												<>
+													{
+														amap.contact.address
+															.street
+													}
+													<br />
+												</>
+											)}
+											{amap.contact.address
+												.postalCode && (
+												<>
+													{
+														amap.contact.address
+															.postalCode
+													}{' '}
+												</>
+											)}
 											{amap.contact.address.city}
 										</td>
 										<td>
@@ -180,12 +208,15 @@ const Amaps = () => {
 															>
 																{email.email}
 															</a>
-															<br />
 														</div>
 													)
 												}
 											)}
 										</td>
+										<td>
+											{displayDayOfWeek(amap.deliveryDay)}
+										</td>
+										<td>{amap.deliveryTime}</td>
 										<td>{amap.accessCode}</td>
 										<td className='rowEnd'>
 											<BiEdit

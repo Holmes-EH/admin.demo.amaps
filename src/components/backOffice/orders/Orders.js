@@ -233,7 +233,11 @@ const Orders = () => {
 					<p style={{ margin: 'auto' }}>Amap :</p>
 					<select
 						name='amap'
-						style={{ margin: 'auto', border: 'none' }}
+						style={{
+							margin: 'auto',
+							border: 'none',
+							maxWidth: '60%',
+						}}
 					>
 						<option value=''>Toutes</option>
 						{amaps.map((amap) => {

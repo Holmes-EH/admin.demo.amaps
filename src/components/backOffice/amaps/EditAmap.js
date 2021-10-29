@@ -18,6 +18,8 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 		amap.contact.address.postalCode
 	)
 	const [tel, setTel] = useState(amap.contact.tel)
+	const [deliveryDay, setDeliveryDay] = useState(amap.deliveryDay)
+	const [deliveryTime, setDeliveryTime] = useState(amap.deliveryTime)
 	const [emails, setEmails] = useState(
 		JSON.parse(JSON.stringify(amap.contact.emails))
 	)
@@ -55,6 +57,8 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 							},
 						},
 						groupement,
+						deliveryDay,
+						deliveryTime,
 					},
 					config
 				)
@@ -98,6 +102,8 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 							},
 						},
 						groupement,
+						deliveryDay,
+						deliveryTime,
 					},
 					config
 				)
@@ -192,6 +198,37 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 						/>
 						<label htmlFor='city' className='label'>
 							Ville
+						</label>
+					</div>
+					<div className='field'>
+						<label htmlFor='deliveryDay'>
+							Jour de distribution
+						</label>
+						<select
+							name='deliveryDay'
+							onChange={(e) => setDeliveryDay(e.target.value)}
+							value={deliveryDay}
+						>
+							<option value='0'>Lundi</option>
+							<option value='1'>Mardi</option>
+							<option value='2'>Mercredi</option>
+							<option value='3'>Jeudi</option>
+							<option value='4'>Vendredi</option>
+							<option value='5'>Samedi</option>
+							<option value='6'>Dimanche</option>
+						</select>
+					</div>
+					<div className='field'>
+						<input
+							type='time'
+							name='heureDeLivraison'
+							className='input'
+							value={deliveryTime}
+							autoComplete='off'
+							onChange={(e) => setDeliveryTime(e.target.value)}
+						/>
+						<label htmlFor='heureDeLivraison' className='label'>
+							Heure de distribution
 						</label>
 					</div>
 					<br />
