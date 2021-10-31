@@ -9,7 +9,13 @@ import { useHistory } from 'react-router-dom'
 
 import './home.css'
 
-import { BiChevronLeft, BiChevronRight, BiPurchaseTagAlt } from 'react-icons/bi'
+import {
+	BiChevronLeft,
+	BiChevronRight,
+	BiPurchaseTagAlt,
+	BiEnvelope,
+	BiEnvelopeOpen,
+} from 'react-icons/bi'
 
 const Home = () => {
 	const history = useHistory()
@@ -220,6 +226,44 @@ const Home = () => {
 				config
 			)
 			setSessions(data)
+			dispatch({ type: 'FINISHED_LOADING' })
+		} catch (error) {
+			dispatch({
+				type: 'MESSAGE',
+				payload:
+					error.response && error.response.data.message
+						? error.response.data.message
+						: error.message,
+				messageType: 'error',
+			})
+		}
+	}
+
+	const notifyAmap = async (amapId) => {
+		dispatch({ type: 'LOADING' })
+		try {
+			const config = {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			}
+			const { data } = await axios.post(
+				`${process.env.REACT_APP_API_URL}/api/amaps/sendMail`,
+				{ amapId, news: sessions.news, sessionId: sessions._id },
+				config
+			)
+			const newRecaps = [...recaps]
+			const index = newRecaps.findIndex(
+				(recap) => recap._id === data.orderRecap._id
+			)
+			newRecaps[index] = data.orderRecap
+			setRecaps(newRecaps)
+
+			dispatch({
+				type: 'MESSAGE',
+				payload: data.message,
+				messageType: 'success',
+			})
 			dispatch({ type: 'FINISHED_LOADING' })
 		} catch (error) {
 			dispatch({
@@ -586,6 +630,27 @@ const Home = () => {
 												<BiPurchaseTagAlt />
 											</div>
 										</td>
+										{recap.delivery && (
+											<td className='rowEnd recapRowEnd'>
+												<div
+													className={`button ${
+														recap.notificationSent &&
+														'disable'
+													}`}
+													onClick={() =>
+														notifyAmap(
+															recap.amap._id
+														)
+													}
+												>
+													{recap.notificationSent ? (
+														<BiEnvelopeOpen />
+													) : (
+														<BiEnvelope />
+													)}
+												</div>
+											</td>
+										)}
 									</tr>
 								)
 							})}
