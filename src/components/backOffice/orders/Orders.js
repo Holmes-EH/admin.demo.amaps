@@ -186,8 +186,8 @@ const Orders = () => {
 					`${process.env.REACT_APP_API_URL}/api/orders?session=${selectedSession}&clientName=${clientName}&amap=${amap}`,
 					config
 				)
-				dispatch({ type: 'FINISHED_LOADING' })
 				setOrders(data.allOrders)
+				dispatch({ type: 'FINISHED_LOADING' })
 			} catch (error) {
 				dispatch({
 					type: 'MESSAGE',

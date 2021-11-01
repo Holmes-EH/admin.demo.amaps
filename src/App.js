@@ -3,6 +3,7 @@ import Layout from './components/backOffice/Layout'
 import axios from 'axios'
 import { store } from './store'
 import { useContext, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import './App.css'
 
@@ -10,6 +11,7 @@ function App() {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user, products } = globalContext.state
+	const history = useHistory()
 
 	useEffect(() => {
 		const getProducts = async () => {
@@ -55,7 +57,7 @@ function App() {
 			) : user.isAdmin ? (
 				<Layout />
 			) : (
-				<p>redirect</p>
+				history.push('https://juju2fruits.com')
 			)}
 		</div>
 	)
