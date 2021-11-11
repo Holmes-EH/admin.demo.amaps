@@ -44,10 +44,11 @@ const Home = () => {
 	}
 
 	const getRecapTotalWeight = (total, product) => {
-		return (
-			product.product.title.toLowerCase() !== 'mangues' &&
-			total + product.quantity
-		)
+		if (product.product.title.toLowerCase() !== 'mangues') {
+			return total + product.quantity
+		} else {
+			return total
+		}
 	}
 
 	const getSessionTotalWeight = () => {
@@ -57,6 +58,7 @@ const Home = () => {
 		})
 		return totalWeight
 	}
+
 	const getSessionTotalWeightPerProduct = (product) => {
 		let totalWeightPerProduct = 0
 		recaps.forEach((recap) => {
