@@ -417,8 +417,9 @@ const Home = () => {
 					onClick={incrementDate}
 				/>
 			</div>
-			{loading && <Loader />}
-			{sessions && sessions.length === 0 ? (
+			{loading ? (
+				<Loader />
+			) : sessions && sessions.length === 0 ? (
 				<div
 					className='button'
 					style={{
