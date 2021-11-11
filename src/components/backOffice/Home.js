@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { store } from '../../store'
 import axios from 'axios'
 
+import MessageModal from './MessageModal'
 import Toaster from '../Toaster'
 import Loader from '../Loader/Loader'
 
@@ -25,6 +26,11 @@ const Home = () => {
 		globalContext.state
 	const [recaps, setRecaps] = useState([])
 	const [sessions, setSessions] = useState([])
+	const [messageObject, setMessageObject] = useState('')
+	const [messageBody, setMessageBody] = useState('')
+	const [selectedAmapId, setSelectedAmapId] = useState('')
+	const [amapName, setAmapName] = useState('')
+	const [displayMessageModal, setdisplayMessageModal] = useState(false)
 
 	const decrementDate = () => {
 		dispatch({
@@ -41,6 +47,14 @@ const Home = () => {
 				selectedMonth.setMonth(selectedMonth.getMonth() + 1)
 			),
 		})
+	}
+	const elision = (productTitle) => {
+		const vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'h']
+		if (vowels.includes(productTitle.slice(0, 1).toLowerCase())) {
+			return `d'${productTitle.toLowerCase()}`
+		} else {
+			return `de ${productTitle.toLowerCase()}`
+		}
 	}
 
 	const getRecapTotalWeight = (total, product) => {
@@ -118,12 +132,6 @@ const Home = () => {
 		) {
 			dispatch({ type: 'LOADING' })
 			try {
-				const config = {
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				}
-				console.log(config)
 				const { data } = await axios.delete(
 					`${process.env.REACT_APP_API_URL}/api/sessions`,
 					{
@@ -240,9 +248,43 @@ const Home = () => {
 			})
 		}
 	}
-
+	const displayEmailMessage = (amapId, amapName) => {
+		setdisplayMessageModal(true)
+		setAmapName(amapName)
+		setSelectedAmapId(amapId)
+		const amapRecap = recaps.filter((recap) => recap.amap._id === amapId)[0]
+		setMessageObject(
+			`Ouverture des commandes d'agrumes sur juju2fruits pour le mois ${elision(
+				selectedMonth.toLocaleDateString('fr-FR', { month: 'long' })
+			)}`
+		)
+		setMessageBody(
+			`Bonjour.\nJe vous écris pour vous signaler que vos adhérents peuvent désormais passer leur commande d'agrumes sur juju2fruits.com pour le mois ${elision(
+				selectedMonth.toLocaleDateString('fr-FR', {
+					month: 'long',
+				})
+			)} jusqu'au ${new Date(sessions.lastOrderDate).toLocaleDateString(
+				'fr-FR',
+				{
+					weekday: 'long',
+					day: 'numeric',
+					month: 'long',
+				}
+			)} pour une distribution le ${new Date(
+				amapRecap.delivery
+			).toLocaleDateString('fr-FR', {
+				weekday: 'long',
+				day: 'numeric',
+				month: 'long',
+			})}.\n${
+				sessions.news.length > 0 && `Quelques infos :\n${sessions.news}`
+			}
+        `
+		)
+	}
 	const notifyAmap = async (amapId) => {
 		dispatch({ type: 'LOADING' })
+		setdisplayMessageModal(false)
 		try {
 			const config = {
 				headers: {
@@ -251,7 +293,12 @@ const Home = () => {
 			}
 			const { data } = await axios.post(
 				`${process.env.REACT_APP_API_URL}/api/amaps/sendMail`,
-				{ amapId, news: sessions.news, sessionId: sessions._id },
+				{
+					amapId: selectedAmapId,
+					sessionId: sessions._id,
+					messageObject,
+					messageBody,
+				},
 				config
 			)
 			const newRecaps = [...recaps]
@@ -268,6 +315,7 @@ const Home = () => {
 			})
 			dispatch({ type: 'FINISHED_LOADING' })
 		} catch (error) {
+			console.log(error)
 			dispatch({
 				type: 'MESSAGE',
 				payload:
@@ -387,15 +435,31 @@ const Home = () => {
 				</p>
 			) : (
 				<>
+					{displayMessageModal && (
+						<MessageModal
+							messageObject={messageObject}
+							setMessageObject={setMessageObject}
+							messageBody={messageBody}
+							setMessageBody={setMessageBody}
+							sendMessage={notifyAmap}
+							amapName={amapName}
+							setDisplayMessageModal={setdisplayMessageModal}
+						/>
+					)}
 					<div className='topSection flex'>
 						<div
 							className='flex column'
-							style={{ margin: 'auto', marginRight: '1em' }}
+							style={{
+								margin: 'auto',
+								marginRight: '1em',
+								width: '100%',
+							}}
 						>
 							<h3>Infos du mois :</h3>
 							<textarea
+								style={{ width: '100%' }}
 								name='news'
-								cols='60'
+								cols='20'
 								rows='10'
 								value={sessions.news}
 								onChange={(e) =>
@@ -640,8 +704,9 @@ const Home = () => {
 														'disable'
 													}`}
 													onClick={() =>
-														notifyAmap(
-															recap.amap._id
+														displayEmailMessage(
+															recap.amap._id,
+															recap.amap.name
 														)
 													}
 												>

@@ -53,6 +53,8 @@ textarea {
 
 .modal {
 	position: fixed;
+	left: 0;
+	top: 63px;
 	width: 100vw;
 	height: 100vh;
 	padding: 0 20%;

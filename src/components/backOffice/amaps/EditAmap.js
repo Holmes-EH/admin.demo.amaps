@@ -220,7 +220,7 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 					</div>
 					<div className='field'>
 						<input
-							type='time'
+							type='text'
 							name='heureDeLivraison'
 							className='input'
 							value={deliveryTime}
