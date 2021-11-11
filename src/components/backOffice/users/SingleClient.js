@@ -15,8 +15,10 @@ const SingleClient = () => {
 	const [currentUser, setCurrentUser] = useState({
 		name: '',
 		email: '',
+		amap: '',
 		isAdmin: false,
 	})
+	const [amaps, setAmaps] = useState([])
 	const { userId } = useParams()
 	const setValue = (field, value) => {
 		let newUserData = { ...currentUser }
@@ -27,6 +29,10 @@ const SingleClient = () => {
 				break
 			case 'email':
 				newUserData.email = value
+				setCurrentUser(newUserData)
+				break
+			case 'amap':
+				newUserData.amap = value
 				setCurrentUser(newUserData)
 				break
 			case 'isAdmin':
@@ -52,6 +58,7 @@ const SingleClient = () => {
 					_id: currentUser._id,
 					name: currentUser.name,
 					email: currentUser.email,
+					amap: currentUser.amap,
 					isAdmin: currentUser.isAdmin,
 				},
 				config
@@ -78,6 +85,31 @@ const SingleClient = () => {
 	}
 
 	useEffect(() => {
+		const getAmaps = async () => {
+			dispatch({ type: 'LOADING' })
+			try {
+				const config = {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+				const { data } = await axios.get(
+					`${process.env.REACT_APP_API_URL}/api/amaps`,
+					config
+				)
+				dispatch({ type: 'FINISHED_LOADING' })
+				setAmaps(data)
+			} catch (error) {
+				dispatch({
+					type: 'MESSAGE',
+					payload:
+						error.response && error.response.data.message
+							? error.response.data.message
+							: error.message,
+					messageType: 'error',
+				})
+			}
+		}
 		const getUser = async () => {
 			dispatch({ type: 'LOADING' })
 			try {
@@ -104,6 +136,7 @@ const SingleClient = () => {
 			}
 		}
 		getUser()
+		getAmaps()
 	}, [dispatch, user.token, userId])
 
 	return (
@@ -149,6 +182,29 @@ const SingleClient = () => {
 							<label htmlFor='email' className='label'>
 								Email
 							</label>
+						</div>
+						<div className='field'>
+							<label htmlFor='amap'></label>
+							<select
+								name='amap'
+								style={{
+									margin: 'auto',
+									border: 'none',
+									maxWidth: '60%',
+								}}
+								value={currentUser.amap}
+								onChange={(e) =>
+									setValue(e.target.name, e.target.value)
+								}
+							>
+								{amaps.map((amap) => {
+									return (
+										<option value={amap._id} key={amap._id}>
+											{amap.name}
+										</option>
+									)
+								})}
+							</select>
 						</div>
 						<div className='field'>
 							<input
