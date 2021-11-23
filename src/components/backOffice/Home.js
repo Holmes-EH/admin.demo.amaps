@@ -181,6 +181,7 @@ const Home = () => {
 					(recap) => recap._id === _id
 				)
 				recapToUpdate[0].delivery = date
+				recapToUpdate[0].notificationSent = false
 				dispatch({ type: 'FINISHED_LOADING' })
 			} catch (error) {
 				dispatch({
@@ -254,32 +255,32 @@ const Home = () => {
 		setSelectedAmapId(amapId)
 		const amapRecap = recaps.filter((recap) => recap.amap._id === amapId)[0]
 		setMessageObject(
-			`Ouverture des commandes d'agrumes sur juju2fruits pour le mois ${elision(
-				selectedMonth.toLocaleDateString('fr-FR', { month: 'long' })
-			)}`
+			`Agrumes ${selectedMonth.toLocaleDateString('fr-FR', {
+				month: 'long',
+			})}`
 		)
 		setMessageBody(
-			`Bonjour.\nJe vous écris pour vous signaler que vos adhérents peuvent désormais passer leur commande d'agrumes sur juju2fruits.com pour le mois ${elision(
+			`Bonjour amateurs et amatrices d’agrumes !\nC’est reparti pour le mois ${elision(
 				selectedMonth.toLocaleDateString('fr-FR', {
 					month: 'long',
 				})
-			)} jusqu'au ${new Date(sessions.lastOrderDate).toLocaleDateString(
-				'fr-FR',
-				{
-					weekday: 'long',
-					day: 'numeric',
-					month: 'long',
-				}
-			)} pour une distribution le ${new Date(
+			)}, vos commandes sont à passer jusqu’au ${new Date(
+				sessions.lastOrderDate
+			).toLocaleDateString('fr-FR', {
+				weekday: 'long',
+				day: 'numeric',
+				month: 'long',
+			})}.\nPour une livraison le ${new Date(
 				amapRecap.delivery
 			).toLocaleDateString('fr-FR', {
 				weekday: 'long',
 				day: 'numeric',
 				month: 'long',
-			})}.\n${
-				sessions.news.length > 0 && `Quelques infos :\n${sessions.news}`
-			}
-        `
+			})} vers ${amapRecap.amap.deliveryTime} sur ${
+				amapRecap.amap.name
+			}.\n\nVous pouvez passer vos commandes directement à l’adresse: <a href="https://juju2fruits.com">juju2fruits.com</a> avec votre code Amap: ${
+				amapRecap.amap.accessCode
+			}.\n\nBonne journée,\nJulien F`
 		)
 	}
 	const notifyAmap = async (amapId) => {
