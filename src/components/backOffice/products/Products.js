@@ -1,12 +1,10 @@
 import { useContext, useState } from 'react'
 import { store } from '../../../store'
-import axios from 'axios'
 import Toaster from '../../Toaster'
 import Loader from '../../Loader/Loader'
 import EditProduct from './EditProduct'
 import {
 	BiEdit,
-	BiTrash,
 	BiAddToQueue,
 	BiCheckCircle,
 	BiMinusCircle,
@@ -14,9 +12,7 @@ import {
 
 const Products = () => {
 	const globalContext = useContext(store)
-	const { dispatch } = globalContext
-	const { user, message, messageType, loading, products } =
-		globalContext.state
+	const { message, messageType, loading, products } = globalContext.state
 	const [displayModal, setDisplayModal] = useState(false)
 	const [productToEdit, setProductToEdit] = useState()
 
@@ -30,47 +26,6 @@ const Products = () => {
 			unitOnly: false,
 		}
 		setProductToEdit(product)
-	}
-
-	const deleteProduct = async (id, title) => {
-		if (window.confirm(`Es-tu sûr de vouloir supprimer les \n${title} ?`)) {
-			dispatch({ type: 'LOADING' })
-			let newArrayOfProducts = products.filter((product) => {
-				return product._id !== id
-			})
-			dispatch({
-				type: 'SET_PRODUCT_LIST',
-				payload: newArrayOfProducts,
-			})
-
-			try {
-				const config = {
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				}
-				const { data } = await axios.delete(
-					`${process.env.REACT_APP_API_URL}/api/products/${id}`,
-					config
-				)
-				dispatch({
-					type: 'MESSAGE',
-					payload: data.message,
-					messageType: 'success',
-				})
-				dispatch({ type: 'FINISHED_LOADING' })
-			} catch (error) {
-				dispatch({
-					type: 'MESSAGE',
-					payload:
-						error.response && error.response.data.error
-							? error.response.data.error
-							: error.message,
-					messageType: 'error',
-				})
-				dispatch({ type: 'FINISHED_LOADING' })
-			}
-		}
 	}
 
 	const editProduct = (index, product) => {
@@ -172,17 +127,6 @@ const Products = () => {
 												className='action'
 												onClick={() => {
 													editProduct(index, product)
-												}}
-											/>
-										</td>
-										<td className='rowEnd'>
-											<BiTrash
-												className='action'
-												onClick={() => {
-													deleteProduct(
-														product._id,
-														product.title
-													)
 												}}
 											/>
 										</td>
