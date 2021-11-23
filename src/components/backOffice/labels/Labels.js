@@ -10,7 +10,7 @@ import './labels.css'
 const Labels = () => {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
-	const { user, loading } = globalContext.state
+	const { user, loading, products } = globalContext.state
 	const [orders, setOrders] = useState([])
 
 	const { amap, session } = useParams()
@@ -63,7 +63,7 @@ const Labels = () => {
 				<Loader />
 			) : (
 				<div className='tablesContainer'>
-					{orders.map((order, index) => {
+					{orders.map((order) => {
 						return (
 							<table className='etiquette' key={order._id}>
 								<tbody>
@@ -77,18 +77,26 @@ const Labels = () => {
 									<tr>
 										{order.details.map((detail) => {
 											return (
-												<td key={`title-${detail._id}`}>
-													{detail.product.title.toLowerCase() ===
-													'mangues'
-														? 'Mg'
-														: detail.product.title.toLowerCase() ===
-														  'mandarines'
-														? 'Md'
-														: detail.product.title.substring(
-																0,
-																2
-														  )}
-												</td>
+												products.filter(
+													(product) =>
+														detail.product._id ===
+														product._id
+												)[0].isAvailable && (
+													<td
+														key={`title-${detail._id}`}
+													>
+														{detail.product.title.toLowerCase() ===
+														'mangues'
+															? 'Mg'
+															: detail.product.title.toLowerCase() ===
+															  'mandarines'
+															? 'Md'
+															: detail.product.title.substring(
+																	0,
+																	2
+															  )}
+													</td>
+												)
 											)
 										})}
 										<td>
@@ -100,9 +108,17 @@ const Labels = () => {
 									<tr>
 										{order.details.map((detail) => {
 											return (
-												<td key={`qty-${detail._id}`}>
-													{detail.quantity}
-												</td>
+												products.filter(
+													(product) =>
+														detail.product._id ===
+														product._id
+												)[0].isAvailable && (
+													<td
+														key={`qty-${detail._id}`}
+													>
+														{detail.quantity}
+													</td>
+												)
 											)
 										})}
 										<td>
