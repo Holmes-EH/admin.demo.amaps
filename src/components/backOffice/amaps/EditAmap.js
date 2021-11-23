@@ -18,7 +18,7 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 		amap.contact.address.postalCode
 	)
 	const [tel, setTel] = useState(amap.contact.tel)
-	const [deliveryDay, setDeliveryDay] = useState(amap.deliveryDay)
+	const [deliveryDay, setDeliveryDay] = useState(amap.deliveryDay || '0')
 	const [deliveryTime, setDeliveryTime] = useState(amap.deliveryTime)
 	const [emails, setEmails] = useState(
 		JSON.parse(JSON.stringify(amap.contact.emails))
