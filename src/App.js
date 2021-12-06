@@ -14,6 +14,7 @@ function App() {
 	const history = useHistory()
 
 	useEffect(() => {
+		let mounted = true
 		const getProducts = async () => {
 			dispatch({ type: 'LOADING' })
 			try {
@@ -27,19 +28,34 @@ function App() {
 					config
 				)
 				dispatch({ type: 'FINISHED_LOADING' })
-				dispatch({
-					type: 'SET_PRODUCT_LIST',
-					payload: data,
-				})
+				if (mounted) {
+					dispatch({
+						type: 'SET_PRODUCT_LIST',
+						payload: data,
+					})
+				}
 			} catch (error) {
-				dispatch({
-					type: 'MESSAGE',
-					payload:
-						error.response && error.response.data.message
-							? error.response.data.message
-							: error.message,
-					messageType: 'error',
-				})
+				if (error.response.status === 401) {
+					localStorage.removeItem('juju2fruits_user')
+					dispatch({ type: 'RESET_USER_LOGIN' })
+					dispatch({
+						type: 'MESSAGE',
+						payload:
+							error.response && error.response.data.message
+								? error.response.data.message
+								: error.message,
+						messageType: 'error',
+					})
+				} else {
+					dispatch({
+						type: 'MESSAGE',
+						payload:
+							error.response && error.response.data.message
+								? error.response.data.message
+								: error.message,
+						messageType: 'error',
+					})
+				}
 			}
 		}
 		if (
@@ -48,6 +64,7 @@ function App() {
 		) {
 			getProducts()
 		}
+		return () => (mounted = false)
 	}, [dispatch, user.token, products])
 
 	return (
