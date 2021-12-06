@@ -101,8 +101,8 @@ const Home = () => {
 				{ session: selectedSession, isOpen: true },
 				config
 			)
-			dispatch({ type: 'FINISHED_LOADING' })
 			setSessions(data.sessions)
+			dispatch({ type: 'FINISHED_LOADING' })
 			dispatch({
 				type: 'SET_SELECTED_MONTH',
 				payload: new Date(
@@ -231,9 +231,10 @@ const Home = () => {
 					Authorization: `Bearer ${user.token}`,
 				},
 			}
+
 			const { data } = await axios.put(
 				`${process.env.REACT_APP_API_URL}/api/sessions`,
-				{ _id, lastOrderDate: new Date(date) },
+				{ _id, lastOrderDate: new Date(date).setHours(23, 59, 59) },
 				config
 			)
 			setSessions(data)
