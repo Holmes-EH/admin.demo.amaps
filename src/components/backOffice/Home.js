@@ -649,13 +649,7 @@ const Home = () => {
 											}
 										})}
 										<td>
-											<b>
-												{recap.products.reduce(
-													getRecapTotalWeight,
-													0
-												)}{' '}
-												kg
-											</b>
+											<b>{recap.totalWeight} kg</b>
 										</td>
 										<td className='rowEnd recapRowEnd'>
 											<input
