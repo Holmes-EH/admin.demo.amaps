@@ -1,17 +1,14 @@
 .loading {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	background: var(--black);
 	z-index: 10;
+	width: 130px;
+	height: 130px;
 }
 .loading svg {
 	width: 130px;
+	height: 130px;
 	margin: 0 auto;
 }
 .loading .lemonText {

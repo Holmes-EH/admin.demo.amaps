@@ -68,7 +68,7 @@ function App() {
 	}, [dispatch, user.token, products])
 
 	return (
-		<div className='main flex column' style={{ paddingTop: '65px' }}>
+		<div className='main flex column' style={{ paddingTop: '72px' }}>
 			{!user.token ? (
 				<Login />
 			) : user.isAdmin ? (
