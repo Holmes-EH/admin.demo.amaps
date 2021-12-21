@@ -130,35 +130,44 @@ const Home = () => {
 				)}`
 			)
 		) {
-			dispatch({ type: 'LOADING' })
-			try {
-				const { data } = await axios.delete(
-					`${process.env.REACT_APP_API_URL}/api/sessions`,
-					{
-						data: { _id: id },
-						headers: {
-							Authorization: `Bearer ${user.token}`,
-						},
-					}
+			if (
+				window.confirm(
+					`Cette action supprimera aussi toutes les commandes passées pour le mois de : : ${selectedMonth.toLocaleDateString(
+						'fr-FR',
+						{ month: 'long', year: 'numeric' }
+					)}`
 				)
-				setRecaps([])
-				setSessions([])
-				dispatch({ type: 'FINISHED_LOADING' })
-				dispatch({
-					type: 'MESSAGE',
-					payload: data.message,
-					messageType: 'success',
-				})
-			} catch (error) {
-				dispatch({ type: 'FINISHED_LOADING' })
-				dispatch({
-					type: 'MESSAGE',
-					payload:
-						error.response && error.response.data.message
-							? error.response.data.message
-							: error.message,
-					messageType: 'error',
-				})
+			) {
+				dispatch({ type: 'LOADING' })
+				try {
+					const { data } = await axios.delete(
+						`${process.env.REACT_APP_API_URL}/api/sessions`,
+						{
+							data: { _id: id },
+							headers: {
+								Authorization: `Bearer ${user.token}`,
+							},
+						}
+					)
+					setRecaps([])
+					setSessions([])
+					dispatch({ type: 'FINISHED_LOADING' })
+					dispatch({
+						type: 'MESSAGE',
+						payload: data.message,
+						messageType: 'success',
+					})
+				} catch (error) {
+					dispatch({ type: 'FINISHED_LOADING' })
+					dispatch({
+						type: 'MESSAGE',
+						payload:
+							error.response && error.response.data.message
+								? error.response.data.message
+								: error.message,
+						messageType: 'error',
+					})
+				}
 			}
 		}
 	}
