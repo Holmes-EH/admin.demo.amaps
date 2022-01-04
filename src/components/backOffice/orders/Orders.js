@@ -367,8 +367,8 @@ const Orders = () => {
 															getOrderTotal,
 															0
 														)
-														.toFixed(2)}{' '}
-													€
+														.toFixed(2)}
+													&nbsp;€
 												</b>
 											</td>
 											<td
