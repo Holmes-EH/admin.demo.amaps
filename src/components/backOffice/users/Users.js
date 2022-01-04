@@ -117,100 +117,116 @@ const Users = () => {
 	return (
 		<div className='flex column container'>
 			{message && <Toaster message={message} type={messageType} />}
-			{loading && <Loader />}
-			<div className='userSearch'>
-				<form className='flex searchForm'>
-					<button onClick={(e) => search(e)} className='searchButton'>
-						<BiSearchAlt2 />
-					</button>
-					<input
-						type='text'
-						name='search'
-						placeholder='Rechercher par nom'
-						value={tempKeyword}
-						onChange={(e) => setTempKeyword(e.target.value)}
-						style={{ margin: 'auto', border: 'none' }}
-					/>
-					<button
-						className='resetSearch'
-						onClick={(e) => resetSearch(e)}
-					>
-						<BiX />
-					</button>
-				</form>
-			</div>
-			<h1>Utilisateurs</h1>
-			<table>
-				<thead>
-					<tr>
-						<th>Nom</th>
-						<th>Email</th>
-						<th>Groupement</th>
-						<th>Amap</th>
-						<th>Admin</th>
-						<th>Date de création</th>
-					</tr>
-				</thead>
-				<tbody>
-					{users.map((user) => {
-						return (
-							<tr key={user._id}>
-								<td>{user.name}</td>
-								<td>{user.email}</td>
-								<td>{user.amap ? user.amap.groupement : ''}</td>
-								<td>{user.amap ? user.amap.name : ''}</td>
-								<td
-									className={
-										user.isAdmin
-											? 'available'
-											: 'unavailable'
-									}
-									style={{
-										textAlign: 'center',
-										fontSize: '1.5em',
-									}}
-								>
-									{user.isAdmin ? (
-										<BiCheckCircle />
-									) : (
-										<BiMinusCircle />
-									)}
-								</td>
-								<td>
-									{new Date(
-										user.createdAt
-									).toLocaleDateString('fr-FR', {
-										day: 'numeric',
-										month: 'numeric',
-										year: 'numeric',
-									})}
-								</td>
-								<td className='rowEnd'>
-									<BiEdit
-										className='action'
-										onClick={() => {
-											history.push(`/clients/${user._id}`)
-										}}
-									/>
-								</td>
-								<td className='rowEnd'>
-									<BiTrash
-										className='action'
-										onClick={() => {
-											deleteUser(user)
-										}}
-									/>
-								</td>
+			{loading ? (
+				<Loader />
+			) : (
+				<>
+					<div className='userSearch'>
+						<form className='flex searchForm'>
+							<button
+								onClick={(e) => search(e)}
+								className='searchButton'
+							>
+								<BiSearchAlt2 />
+							</button>
+							<input
+								type='text'
+								name='search'
+								placeholder='Rechercher par nom'
+								value={tempKeyword}
+								onChange={(e) => setTempKeyword(e.target.value)}
+								style={{ margin: 'auto', border: 'none' }}
+							/>
+							<button
+								className='resetSearch'
+								onClick={(e) => resetSearch(e)}
+							>
+								<BiX />
+							</button>
+						</form>
+					</div>
+					<h1>Utilisateurs</h1>
+					<table>
+						<thead>
+							<tr>
+								<th>Nom</th>
+								<th>Email</th>
+								<th>Groupement</th>
+								<th>Amap</th>
+								<th>Admin</th>
+								<th>Date de création</th>
 							</tr>
-						)
-					})}
-				</tbody>
-			</table>
-			<Pagination
-				pages={pages}
-				pageNumber={pageNumber}
-				setPageNumber={setPageNumber}
-			/>
+						</thead>
+						<tbody>
+							{users.map((user) => {
+								return (
+									<tr key={user._id}>
+										<td>{user.name}</td>
+										<td>{user.email}</td>
+										<td>
+											{user.amap
+												? user.amap.groupement
+												: ''}
+										</td>
+										<td>
+											{user.amap ? user.amap.name : ''}
+										</td>
+										<td
+											className={
+												user.isAdmin
+													? 'available'
+													: 'unavailable'
+											}
+											style={{
+												textAlign: 'center',
+												fontSize: '1.5em',
+											}}
+										>
+											{user.isAdmin ? (
+												<BiCheckCircle />
+											) : (
+												<BiMinusCircle />
+											)}
+										</td>
+										<td>
+											{new Date(
+												user.createdAt
+											).toLocaleDateString('fr-FR', {
+												day: 'numeric',
+												month: 'numeric',
+												year: 'numeric',
+											})}
+										</td>
+										<td className='rowEnd'>
+											<BiEdit
+												className='action'
+												onClick={() => {
+													history.push(
+														`/clients/${user._id}`
+													)
+												}}
+											/>
+										</td>
+										<td className='rowEnd'>
+											<BiTrash
+												className='action'
+												onClick={() => {
+													deleteUser(user)
+												}}
+											/>
+										</td>
+									</tr>
+								)
+							})}
+						</tbody>
+					</table>
+					<Pagination
+						pages={pages}
+						pageNumber={pageNumber}
+						setPageNumber={setPageNumber}
+					/>
+				</>
+			)}
 		</div>
 	)
 }
