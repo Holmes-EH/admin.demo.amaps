@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom'
 
 import axios from 'axios'
 
+import { BiChevronLeft } from 'react-icons/bi'
+
 import Loader from '../../Loader/Loader'
 import './labels.css'
 
@@ -62,78 +64,93 @@ const Labels = () => {
 			{loading ? (
 				<Loader />
 			) : (
-				<div className='tablesContainer'>
-					{orders.map((order) => {
-						return (
-							<table className='etiquette' key={order._id}>
-								<tbody>
-									<tr>
-										<th colSpan={order.details.length}>
-											{order.client.name}
-										</th>
-										<td>{order.paid ? 'P' : 'NP'}</td>
-									</tr>
+				<>
+					<a
+						href='/'
+						style={{
+							marginLeft: '2em',
+							textDecoration: 'none',
+							display: 'flex',
+							alignItems: 'center',
+						}}
+					>
+						<BiChevronLeft style={{ fontSize: '2em' }} /> Retour
+					</a>
+					<div className='tablesContainer'>
+						{orders.map((order) => {
+							return (
+								<table className='etiquette' key={order._id}>
+									<tbody>
+										<tr>
+											<th colSpan={order.details.length}>
+												{order.client.name}
+											</th>
+											<td>{order.paid ? 'P' : 'NP'}</td>
+										</tr>
 
-									<tr>
-										{order.details.map((detail) => {
-											return (
-												products.filter(
-													(product) =>
-														detail.product._id ===
-														product._id
-												)[0].isAvailable && (
-													<td
-														key={`title-${detail._id}`}
-													>
-														{detail.product.title.toLowerCase() ===
-														'mangues'
-															? 'Mg'
-															: detail.product.title.toLowerCase() ===
-															  'mandarines'
-															? 'Md'
-															: detail.product.title.substring(
-																	0,
-																	2
-															  )}
-													</td>
+										<tr>
+											{order.details.map((detail) => {
+												return (
+													products.filter(
+														(product) =>
+															detail.product
+																._id ===
+															product._id
+													)[0].isAvailable && (
+														<td
+															key={`title-${detail._id}`}
+														>
+															{detail.product.title.toLowerCase() ===
+															'mangues'
+																? 'Mg'
+																: detail.product.title.toLowerCase() ===
+																  'mandarines'
+																? 'Md'
+																: detail.product.title.substring(
+																		0,
+																		2
+																  )}
+														</td>
+													)
 												)
-											)
-										})}
-										<td>
-											{order.details
-												.reduce(getOrderTotal, 0)
-												.toFixed(2)}
-										</td>
-									</tr>
-									<tr>
-										{order.details.map((detail) => {
-											return (
-												products.filter(
-													(product) =>
-														detail.product._id ===
-														product._id
-												)[0].isAvailable && (
-													<td
-														key={`qty-${detail._id}`}
-													>
-														{detail.quantity}
-													</td>
+											})}
+											<td>
+												{order.details
+													.reduce(getOrderTotal, 0)
+													.toFixed(2)}
+											</td>
+										</tr>
+										<tr>
+											{order.details.map((detail) => {
+												return (
+													products.filter(
+														(product) =>
+															detail.product
+																._id ===
+															product._id
+													)[0].isAvailable && (
+														<td
+															key={`qty-${detail._id}`}
+														>
+															{detail.quantity}
+														</td>
+													)
 												)
-											)
-										})}
-										<td>
-											{order.details.reduce(
-												getRecapTotalWeight,
-												0
-											)}
-										</td>
-									</tr>
-									<tr style={{ height: '5px' }}></tr>
-								</tbody>
-							</table>
-						)
-					})}
-				</div>
+											})}
+											<td>
+												{order.details.reduce(
+													getRecapTotalWeight,
+													0
+												)}
+											</td>
+										</tr>
+										<tr style={{ height: '5px' }}></tr>
+									</tbody>
+								</table>
+							)
+						})}
+					</div>
+				</>
 			)}
 		</div>
 	)

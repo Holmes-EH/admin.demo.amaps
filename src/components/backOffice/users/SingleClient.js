@@ -183,14 +183,13 @@ const SingleClient = () => {
 								Email
 							</label>
 						</div>
-						<div className='field'>
-							<label htmlFor='amap'></label>
+						<div className='field noBorder'>
 							<select
 								name='amap'
 								style={{
 									margin: 'auto',
 									border: 'none',
-									maxWidth: '60%',
+									display: 'block',
 								}}
 								value={currentUser.amap}
 								onChange={(e) =>
@@ -206,7 +205,10 @@ const SingleClient = () => {
 								})}
 							</select>
 						</div>
-						<div className='field'>
+						<div className='field noBorder'>
+							<label htmlFor='isAdmin' className='label'>
+								Administrateur du site
+							</label>
 							<input
 								type='checkbox'
 								name='isAdmin'
@@ -216,9 +218,6 @@ const SingleClient = () => {
 									setValue(e.target.name, e.target.value)
 								}
 							/>
-							<label htmlFor='isAdmin' className='label'>
-								Administrateur du site
-							</label>
 						</div>
 					</form>
 					<div

@@ -200,7 +200,7 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 							Ville
 						</label>
 					</div>
-					<div className='field'>
+					<div className='field noBorder'>
 						<label htmlFor='deliveryDay'>
 							Jour de distribution
 						</label>
@@ -208,6 +208,7 @@ const EditAmap = ({ amap, setDisplayModal, amaps, setAmaps }) => {
 							name='deliveryDay'
 							onChange={(e) => setDeliveryDay(e.target.value)}
 							value={deliveryDay}
+							style={{ marginRight: 'auto', marginLeft: '1em' }}
 						>
 							<option value='0'>Lundi</option>
 							<option value='1'>Mardi</option>

@@ -37,7 +37,8 @@ hr {
 }
 
 @media print {
-	nav {
+	nav,
+	a {
 		display: none !important;
 	}
 	body {

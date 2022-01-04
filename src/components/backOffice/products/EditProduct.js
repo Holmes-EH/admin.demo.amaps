@@ -133,7 +133,10 @@ const EditProduct = ({ product, setDisplayModal }) => {
 						</label>
 					</div>
 					<br />
-					<div className='field'>
+					<div className='field noBorder'>
+						<label htmlFor='rue' className='label'>
+							Disponible
+						</label>
 						<input
 							type='checkbox'
 							name='isAvailable'
@@ -141,11 +144,11 @@ const EditProduct = ({ product, setDisplayModal }) => {
 							checked={isAvailable}
 							onChange={(e) => setisAvailable(!isAvailable)}
 						/>
-						<label htmlFor='rue' className='label'>
-							Disponible
-						</label>
 					</div>
-					<div className='field'>
+					<div className='field noBorder'>
+						<label htmlFor='rue' className='label'>
+							Vendu à l'unité
+						</label>
 						<input
 							type='checkbox'
 							name='unitOnly'
@@ -153,9 +156,6 @@ const EditProduct = ({ product, setDisplayModal }) => {
 							checked={unitOnly}
 							onChange={(e) => setUnitOnly(!unitOnly)}
 						/>
-						<label htmlFor='rue' className='label'>
-							Vendu à l'unité
-						</label>
 					</div>
 				</form>
 				<div

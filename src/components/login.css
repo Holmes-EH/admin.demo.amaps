@@ -105,3 +105,21 @@
 	color: var(--orange);
 	background-color: var(--black);
 }
+
+.noBorder {
+	border: none;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.noBorder:focus-within .label,
+.noBorder .input:not(:placeholder-shown) + .label {
+	transform: none;
+}
+.noBorder .label {
+	position: unset;
+	transform: none;
+}
+.noBorder::after {
+	display: none;
+}
