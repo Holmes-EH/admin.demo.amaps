@@ -288,7 +288,7 @@ const Home = () => {
 				month: 'long',
 			})} vers ${amapRecap.amap.deliveryTime} sur ${
 				amapRecap.amap.name
-			}.\n\nVous pouvez passer vos commandes directement à l’adresse: <a href="https://juju2fruits.com">juju2fruits.com</a> avec votre code Amap: ${
+			}.\n\nVous pouvez passer vos commandes directement à l’adresse: <a href="https://juju2fruits.com">juju2fruits.com</a> avec votre code d'accès: ${
 				amapRecap.amap.accessCode
 			}.\n\nBonne journée,\nJulien F`
 		)
