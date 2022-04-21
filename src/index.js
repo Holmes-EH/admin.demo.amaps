@@ -14,12 +14,3 @@ root.render(
 		</Router>
 	</StateProvider>
 )
-
-// ReactDOM.render(
-// 	<StateProvider>
-// 		<Router>
-// 			<App />
-// 		</Router>
-// 	</StateProvider>,
-// 	document.getElementById('root')
-// )
