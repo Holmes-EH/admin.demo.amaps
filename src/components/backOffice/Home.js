@@ -6,7 +6,7 @@ import MessageModal from './MessageModal'
 import Toaster from '../Toaster'
 import Loader from '../Loader/Loader'
 
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import './home.css'
 
@@ -19,7 +19,7 @@ import {
 } from 'react-icons/bi'
 
 const Home = () => {
-	const history = useHistory()
+	const navigate = useNavigate()
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user, message, messageType, loading, products, selectedMonth } =
@@ -342,7 +342,7 @@ const Home = () => {
 		const selectedSession =
 			selectedMonth.getFullYear().toString() +
 			('0' + (selectedMonth.getMonth() + 1)).slice(-2)
-		history.push(`/etiquettes/${amap}/${selectedSession}`)
+		navigate(`/etiquettes/${amap}/${selectedSession}`, { replace: true })
 	}
 
 	useEffect(() => {

@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { store } from '../../../store'
 import axios from 'axios'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import Toaster from '../../Toaster'
 import Loader from '../../Loader/Loader'
 
 const SingleClient = () => {
-	const history = useHistory()
+	const history = useNavigate()
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user, message, messageType, loading } = globalContext.state

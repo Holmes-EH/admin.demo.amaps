@@ -1,4 +1,4 @@
-import { Switch, Route, Link, useLocation } from 'react-router-dom'
+import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import { useContext } from 'react'
 import { store } from '../../store'
 
@@ -55,29 +55,15 @@ const Layout = () => {
 					</div>
 				</nav>
 			</div>
-			<Switch>
-				<Route path='/produits'>
-					<Products />
-				</Route>
-				<Route path='/amaps'>
-					<Amaps />
-				</Route>
-				<Route path='/etiquettes/:amap/:session'>
-					<Labels />
-				</Route>
-				<Route path='/commandes'>
-					<Orders />
-				</Route>
-				<Route path='/clients/:userId'>
-					<SingleClient />
-				</Route>
-				<Route path='/clients'>
-					<Users />
-				</Route>
-				<Route path='/'>
-					<Home />
-				</Route>
-			</Switch>
+			<Routes>
+				<Route path='/produits' element={<Products />} />
+				<Route path='/amaps' element={<Amaps />} />
+				<Route path='/etiquettes/:amap/:session' element={<Labels />} />
+				<Route path='/commandes' element={<Orders />} />
+				<Route path='/clients/:userId' element={<SingleClient />} />
+				<Route path='/clients' element={<Users />} />
+				<Route path='/' element={<Home />} />
+			</Routes>
 		</>
 	)
 }

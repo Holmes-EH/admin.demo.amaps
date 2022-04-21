@@ -1,15 +1,25 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App'
 import { StateProvider } from './store'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-ReactDOM.render(
+const container = document.getElementById('root')
+const root = createRoot(container)
+root.render(
 	<StateProvider>
 		<Router>
 			<App />
 		</Router>
-	</StateProvider>,
-	document.getElementById('root')
+	</StateProvider>
 )
+
+// ReactDOM.render(
+// 	<StateProvider>
+// 		<Router>
+// 			<App />
+// 		</Router>
+// 	</StateProvider>,
+// 	document.getElementById('root')
+// )

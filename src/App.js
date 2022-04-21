@@ -3,7 +3,7 @@ import Layout from './components/backOffice/Layout'
 import axios from 'axios'
 import { store } from './store'
 import { useContext, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import './App.css'
 
@@ -11,7 +11,7 @@ function App() {
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user, products } = globalContext.state
-	const history = useHistory()
+	const history = useNavigate()
 
 	useEffect(() => {
 		let mounted = true

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useContext } from 'react'
 import { store } from '../../../store'
 import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import Toaster from '../../Toaster'
 import Loader from '../../Loader/Loader'
@@ -20,7 +20,7 @@ import {
 } from 'react-icons/bi'
 
 const Users = () => {
-	const history = useHistory()
+	const navigate = useNavigate()
 	const globalContext = useContext(store)
 	const { dispatch } = globalContext
 	const { user, message, messageType, loading } = globalContext.state
@@ -201,7 +201,7 @@ const Users = () => {
 											<BiEdit
 												className='action'
 												onClick={() => {
-													history.push(
+													navigate(
 														`/clients/${user._id}`
 													)
 												}}
